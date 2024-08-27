@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const mockData = {
   "score": 20,
   "conclusion": "This contract is highly dangerous. It uses a seemingly innocent condition to execute a hidden function that transfers the entire pool balance to the admin account. This action is masked within a function that appears to be performing routine maintenance tasks.",
@@ -25,20 +27,22 @@ const extraHeaders = {
 
 export const ScanApiCall = async ({ body, headers, method }) => {
   try {
-    const res = await fetch(ApiUrl, {
+    const res = await axios({
       method: method,
+      url: ApiUrl,
+      data: body,
       headers: { ...headers, ...extraHeaders },
-      body: body,
-    })
+    });
 
     if (res.status === 200) {
-      console.log("Success in ScanApiCall: ", res)
-      return { ok: true, data: res };
+      console.log("Success in ScanApiCall: ", res.data);
+      return { ok: true, data: res.data };
     }
 
-    return { ok: false, error: res }
+    return { ok: false, error: res };
   } catch (error) {
-    console.log("ERROR in ScanApiCall: ", error)
-    return { error: error, ok: false }
+    console.log("ERROR in ScanApiCall: ", error);
+    return { error: error, ok: false };
   }
-}
+};
+

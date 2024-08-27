@@ -17,11 +17,11 @@ export async function POST(req: Request) {
     const body = scanSchema.parse(json)
     const response: any = await ScanApiCall({ body: json, headers: headers, method: "POST" });
     console.log("API RESPONSE: ", { response });
-    // if (!response.ok) {
-    //   return new Response("something went wrong, error: " + JSON.stringify(res.error), { status: 500 })
-    // }
+    if (!response.ok) {
+      return new Response("something went wrong, error: " + JSON.stringify(response.error), { status: 500 })
+    }
 
-    return NextResponse.json({ data: mockData, status: 200 });
+    return NextResponse.json({ data: response.data, status: 200 });
   } catch (error) {
     console.log("ERROR WHILE SCAN API: ", { error });
     if (error instanceof z.ZodError) {

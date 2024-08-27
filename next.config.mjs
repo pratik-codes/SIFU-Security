@@ -1,7 +1,3 @@
-import { withContentlayer } from "next-contentlayer";
-
-
-
 import "./env.mjs";
 
 
@@ -22,4 +18,4 @@ const nextConfig = {
   },
 }
 
-export default withContentlayer(nextConfig)
+export default nextConfig
