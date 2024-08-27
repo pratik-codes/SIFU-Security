@@ -45,22 +45,22 @@ export default async function IndexPage() {
     <>
       <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
         <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
-          <div
+          {/* <div
             // href={siteConfig.links.twitter}
             className="rounded-2xl bg-muted px-4 py-1.5 text-sm font-medium"
           >
            launching soon!
-          </div>
+          </div> */}
             <Spotlight
               className="-top-50 left-0 md:left-60 md:-top-20"
               fill="white"
             />
             <div className=" p-4 max-w-8xl  mx-auto relative z-10  w-full pt-20 md:pt-0">
               <h1 className="text-4xl md:text-7xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50">
-                Instantly Secure Your Blockchain Transactions.
+Shield Your Sol's with Sifu’s Ultimate Security Tools
             </h1>
               <p className="mt-4 font-normal text-base text-neutral-300 max-w-xl text-center mx-auto">
-             BlockSec provides real-time auditing for smart contracts, transactions, and wallet addresses, instantly detecting malicious activities.
+Stay Safe. Stay Secure. Stay Ahead with SIFU.
               </p>
           </div>
                <div className="space-x-4">
