@@ -1,21 +1,48 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { AlertCircle, Loader2, Terminal } from "lucide-react"
+import React, { useState } from "react"
+import {
+  AlertCircle,
+  CheckCircle,
+  CheckCircle2,
+  Code2,
+  FileSearch,
+  ShieldCheck,
+  XCircle,
+} from "lucide-react"
 
 import { DetectionApiData } from "@/config/detection-apis"
 import { DetectionApiCall } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from "@/components/ui/use-toast"
 
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog"
+import { Progress } from "./ui/progress"
+import { Separator } from "./ui/separator"
+import { Textarea } from "./ui/textarea"
+import { toast } from "./ui/use-toast"
 
 export default function ScanPreview() {
-  const [activeTab, setActiveTab] = useState("smart-contract")
+  const [activeTab, setActiveTab] = useState("transaction")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [scanResult, setScanResult] = useState<any>(null)
+  const [isScanning, setIsScanning] = useState(false)
   const [smartContract, setSmartContract] = useState(
     DetectionApiData.SmartContract.body.contract_code
   )
@@ -25,8 +52,8 @@ export default function ScanPreview() {
   const [transactionSignature, setTransactionSignature] = useState(
     DetectionApiData.Transaction.body.tx_signature
   )
-  const [isScanning, setIsScanning] = useState(false)
-  const [scanResult, setScanResult] = useState({ score: 0, conclusion: "" })
+
+  console.log({ scanResult })
 
   const handleScanApiCall = (res: { ok: boolean; data: any }) => {
     if (res.ok) {
@@ -61,139 +88,263 @@ export default function ScanPreview() {
 
     let res: any = {}
     switch (type) {
-      case "Smart Contract":
-        if (!smartContract) {notifyNoData(); return}
+      case "SmartContract":
+        if (!smartContract) {
+          notifyNoData()
+          return
+        }
         res = await DetectionApiCall(DetectionApiData.SmartContract)
         handleScanApiCall(res)
         break
-      case "Wallet":
-        if (!walletAddress) {notifyNoData(); return}
+      case "ContractAdress":
+        if (!walletAddress) {
+          notifyNoData()
+          return
+        }
         res = await DetectionApiCall(DetectionApiData.Wallet)
         handleScanApiCall(res)
         break
       case "Transaction":
-        if (!transactionSignature) {notifyNoData(); return}
+        if (!transactionSignature) {
+          notifyNoData()
+          return
+        }
         res = await DetectionApiCall(DetectionApiData.Transaction)
         handleScanApiCall(res)
         break
     }
 
+    if (res?.data) setScanResult(res.data)
+    setIsModalOpen(true)
     setIsScanning(false)
   }
 
-  useEffect(() => {
-    console.log({ scanResult })
-  }, [scanResult])
+  const simulateScan = (type: string) => {
+    handleScan(type)
+  }
+
+  const inputChangeHandler = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: string
+  ) => {
+    switch (type) {
+      case "SmartContract":
+        // trim spaces from the input
+        const trimmedInput = e.target.value.replace(/\s/g, "")
+        setSmartContract(e.target.value.replace(/\s/g, ""))
+        break
+      case "ContractAddress":
+        setWalletAddress(e.target.value.replace(/\s/g, ""))
+        break
+      case "Transaction":
+        setTransactionSignature(e.target.value.replace(/\s/g, ""))
+        break
+    }
+  }
+
+  const renderScanResult = () => {
+    if (!scanResult) return null
+
+    switch (activeTab) {
+      case "contract":
+        return (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <p className="font-semibold">Security Score</p>
+                <Progress
+                  value={scanResult.security_score}
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <p className="font-semibold">Code Quality Score</p>
+                <Progress
+                  value={scanResult.code_quality_score}
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <p className="font-semibold">Gas Efficiency Score</p>
+                <Progress
+                  value={scanResult.gas_efficiency_score}
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <p className="font-semibold">Correctness Score</p>
+                <Progress
+                  value={scanResult.correctness_score}
+                  className="w-full"
+                />
+              </div>
+            </div>
+            {scanResult?.Issues && (
+              <div>
+                <h3 className="font-bold text-lg">Issues</h3>
+                <ul className="list-disc">
+                  {Object.entries(scanResult?.Issues).map(([key, value]) => (
+                    <>
+                      <span className="font-semibold">{key}:</span> {value}
+                    </>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <Separator className="my-4" />
+            {scanResult?.fixes && (
+              <div>
+                <h3 className="font-bold text-lg">Fixes</h3>
+                <ul className="list-disc space-y-4">
+                  {Object.entries(scanResult.fixes).map(([key, value]) => (
+                    <>
+                      <span className="font-semibold">{key}:</span> {value}
+                    </>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )
+      case "transaction":
+      case "address":
+        return (
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              {scanResult.color === "RED" && (
+                <XCircle className="text-red-500" />
+              )}
+              {scanResult.color === "YELLOW" && (
+                <AlertCircle className="text-yellow-500" />
+              )}
+              {scanResult.color === "GREEN" && (
+                <CheckCircle className="text-green-500" />
+              )}
+              <span className="font-semibold">{scanResult.color}</span>
+            </div>
+            <p>{scanResult.conclusion}</p>
+            <div>
+              <h3 className="font-bold text-lg">Evaluation</h3>
+              <p>{scanResult.evaluation}</p>
+            </div>
+          </div>
+        )
+    }
+  }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardContent className="mt-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="smart-contract">Smart Contract</TabsTrigger>
-            <TabsTrigger value="wallet">Wallet</TabsTrigger>
-            <TabsTrigger value="transactions">Transactions</TabsTrigger>
-          </TabsList>
-          <TabsContent value="smart-contract">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                handleScan("Smart Contract")
-              }}
-              className="space-y-4"
-            >
-              <Textarea
-                placeholder="Enter smart contract code here"
-                value={smartContract}
-                onChange={(e) => setSmartContract(e.target.value)}
-                className="min-h-[200px]"
-              />
-              <Button type="submit" className="w-full" disabled={isScanning}>
-                {isScanning ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Scanning...
-                  </>
-                ) : (
-                  "Scan Smart Contract"
-                )}
-              </Button>
-            </form>
-          </TabsContent>
-          <TabsContent value="wallet">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                handleScan("Wallet")
-              }}
-              className="space-y-4"
-            >
-              <Textarea
-                placeholder="Enter wallet address"
-                value={walletAddress}
-                onChange={(e) => setWalletAddress(e.target.value)}
-                className="min-h-[200px]"
-              />
-              <Button type="submit" className="w-full" disabled={isScanning}>
-                {isScanning ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Scanning...
-                  </>
-                ) : (
-                  "Scan Wallet"
-                )}
-              </Button>
-            </form>
-          </TabsContent>
-          <TabsContent value="transactions">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                handleScan("Transaction")
-              }}
-              className="space-y-4"
-            >
-              <Textarea
-                placeholder="Enter transaction signature"
-                value={transactionSignature}
-                onChange={(e) => setTransactionSignature(e.target.value)}
-                className="min-h-[200px]"
-              />
-              <Button type="submit" className="w-full" disabled={isScanning}>
-                {isScanning ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Scanning...
-                  </>
-                ) : (
-                  "Scan Transaction"
-                )}
-              </Button>
-            </form>
-          </TabsContent>
-        </Tabs>
-        {scanResult.score !== 0 && (
-          <div className="p-2 space-y-4 mt-6">
-            {scanResult && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-6 w-6 my-auto" />
-                <AlertTitle className="ml-2 font-extrabold text-lg">
-                  Warning
-                </AlertTitle>
-                <AlertDescription className="font-bold ml-2">
-                  The following issues were found in the scanned data:
-                </AlertDescription>
-              </Alert>
-            )}
-            <Alert>
-              <Terminal className="h-4 w-4" />
-              <AlertTitle className="font-extrabold">Conclusion</AlertTitle>
-              <AlertDescription>{scanResult?.conclusion}</AlertDescription>
-            </Alert>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+    <div className="w-full max-w-4xl mx-auto p-6 space-y-8">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        defaultValue="transaction"
+        className="w-full"
+      >
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="transaction">Transaction Validator</TabsTrigger>
+          <TabsTrigger value="address">Address Checker</TabsTrigger>
+          <TabsTrigger value="contract">Contract Auditing</TabsTrigger>
+        </TabsList>
+        <TabsContent value="transaction">
+          <Card>
+            <CardHeader>
+              <CardTitle>Simulated Transaction Validator</CardTitle>
+              <CardDescription>
+                Before you hit "send" on that Solana transaction, let our tool
+                do the heavy lifting. We simulate and scrutinize the transaction
+                details, giving you a clear, human-readable report on whether
+                it's malicious.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex space-x-4">
+                <Input
+                  value={transactionSignature}
+                  onChange={(e) => inputChangeHandler(e, "Transaction")}
+                  placeholder="Enter transaction hash or details"
+                  className="flex-grow"
+                />
+                <Button
+                  onClick={() => simulateScan("Transaction")}
+                  disabled={isScanning}
+                >
+                  {isScanning ? "Scanning..." : "Scan"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="address">
+          <Card>
+            <CardHeader>
+              <CardTitle>Contract Address Checker</CardTitle>
+              <CardDescription>
+                Before you or your wallet interact with any contract, use our
+                analyzer to ensure the activity is safe. Know what's under the
+                hood before committing.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex space-x-4">
+                <Input
+                  value={walletAddress}
+                  onChange={(e) => inputChangeHandler(e, "ContractAddress")}
+                  placeholder="Enter contract address"
+                  className="flex-grow"
+                />
+                <Button
+                  onClick={() => simulateScan("ContractAdress")}
+                  disabled={isScanning}
+                >
+                  {isScanning ? "Checking..." : "Check"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="contract">
+          <Card>
+            <CardHeader>
+              <CardTitle>Smart Contract Auditing</CardTitle>
+              <CardDescription>
+                Our comprehensive auditing tool dives deep into smart contracts,
+                identifying every vulnerability and issue. Secure your contracts
+                with precision.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex space-x-4">
+                <Input
+                  value={smartContract}
+                  onChange={(e) => inputChangeHandler(e, "SmartContract")}
+                  placeholder="Enter contract code or address"
+                  className="flex-grow"
+                />
+                <Button
+                  onClick={() => simulateScan("SmartContract")}
+                  disabled={isScanning}
+                >
+                  {isScanning ? "Auditing..." : "Audit"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+      <div className="text-center">
+        <Badge variant="outline" className="text-sm">
+          Powered by SIFU
+        </Badge>
+      </div>
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="bg-zinc-900 text-zinc-100 border-zinc-700">
+          <DialogHeader>
+            <DialogTitle>Scan Results</DialogTitle>
+            <DialogDescription>{scanResult?.conclusion}</DialogDescription>
+          </DialogHeader>
+          {renderScanResult()}
+        </DialogContent>
+      </Dialog>
+    </div>
   )
 }
