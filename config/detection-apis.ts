@@ -8,9 +8,8 @@ export const DetectionApiData = {
       action: "analyze_contract_code"
     },
     method: "POST",
-
   },
-  "Wallet": {
+  "ContractAddress": {
     url: ApiUrl,
     body: {
       contract_address: "984GBL7PhceChtN64NWLdBb49rSQXX7ozpdkEbR1pump",

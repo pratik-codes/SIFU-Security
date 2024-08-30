@@ -1,9 +1,11 @@
 "use client"
 
 import { useState } from "react"
-// import { SendHorizontal, Code, Loader2 } from 'lucide-react'
-import { Loader2 } from "lucide-react"
+import { Code, Loader2, Send } from "lucide-react"
+import JSONPretty from "react-json-pretty"
 
+import { DetectionApiData } from "@/config/detection-apis"
+import { DetectionApiCall } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -20,34 +22,27 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 
 export default function ApiClient() {
   const [method, setMethod] = useState("POST")
-  const [url, setUrl] = useState("")
-  const [scanType, setScanType] = useState("")
-  const [body, setBody] = useState("")
+  const [scanType, setScanType] = useState("Transaction")
+  const [apiData, setApiData] = useState(DetectionApiData.Transaction)
   const [response, setResponse] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      setResponse(
-        JSON.stringify(
-          {
-            method,
-            url,
-            scanType,
-            body: body ? JSON.parse(body) : {},
-            message:
-              "This is a mock response. In a real application, this would be the API response.",
-          },
-          null,
-          2
-        )
-      )
-      setIsLoading(false)
-    }, 1500)
+    const apiCallData = DetectionApiData[scanType]
+    const res = await DetectionApiCall(apiCallData)
+    setResponse(JSON.stringify(res))
+    setIsLoading(false)
   }
+
+  const changeScanType = (type: string) => {
+    setScanType(type)
+    setResponse("")
+    const newData = DetectionApiData[type]
+    setApiData({ ...newData })
+  }
+  console.log({ apiData, scanType })
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
@@ -55,55 +50,47 @@ export default function ApiClient() {
         className="-top-50 left-0 md:left-60 md:-top-20"
         fill="white"
       />
-      <Card className="bg-background shadow-lg border border-border">
+      <Card className="bg-background shadow-lg rounded-3xl">
         <CardContent className="mt-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2">
-              <Select
-                defaultValue="Scan wallet"
-                value={method}
-                onValueChange={setMethod}
-              >
-                <SelectTrigger className="w-full sm:w-[100px]">
+              <Select value={method} onValueChange={setMethod}>
+                <SelectTrigger className="w-full sm:w-[250px]">
                   <SelectValue placeholder="Method" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="GET">GET</SelectItem>
                   <SelectItem value="POST">POST</SelectItem>
                 </SelectContent>
               </Select>
               <Input
+                readOnly={true}
                 type="text"
                 placeholder="Enter API URL"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
+                value={"https://api.sifu.com/scan"}
                 className="flex-grow"
               />
-              <Select value={scanType} onValueChange={setScanType}>
-                <SelectTrigger className="w-full sm:w-[180px]">
+              <Select value={scanType} onValueChange={changeScanType}>
+                <SelectTrigger className="w-full sm:w-[350px]">
                   <SelectValue placeholder="Select scan type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="transactions">
-                    Scan transactions
+                  <SelectItem value="Transaction">Scan transactions</SelectItem>
+                  <SelectItem value="SmartContract">Scan contract</SelectItem>
+                  <SelectItem value="ContractAddress">
+                    Scan contract address
                   </SelectItem>
-                  <SelectItem value="contract">Scan contract</SelectItem>
-                  <SelectItem value="wallet">Scan wallet</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            <Textarea
-              placeholder="Enter JSON body"
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-              className="min-h-[200px] bg-muted/50"
-            />
+           <pre className="bg-muted/50 p-4 rounded-lg overflow-x-auto border border-border text-start">
+              <JSONPretty id="json-pretty" data={apiData.body}></JSONPretty>
+            </pre>
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? (
                 <>Processing...</>
               ) : (
                 <>
-                  {/* <SendHorizontal className="mr-2 h-4 w-4" /> */}
+                  <Send className="mr-2 h-4 w-4" />
                   Send Request
                 </>
               )}
@@ -111,11 +98,11 @@ export default function ApiClient() {
           </form>
           {response && (
             <div className="mt-8">
-              <h2 className="text-xl font-bold mb-2 text-foreground flex items-center">
-                Response:
+              <h2 className="text-lg font-bold mb-2 text-foreground flex">
+                Response
               </h2>
-              <pre className="bg-muted/50 p-4 rounded-lg overflow-x-auto border border-border">
-                <code>{response}</code>
+              <pre className="bg-muted/50 p-4 rounded-lg overflow-x-auto border border-border text-start">
+                <JSONPretty id="json-pretty" data={response}></JSONPretty>
               </pre>
             </div>
           )}

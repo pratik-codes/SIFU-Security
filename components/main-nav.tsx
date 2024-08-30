@@ -4,6 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import { useSelectedLayoutSegment } from "next/navigation"
 
+import mixpanel from "mixpanel-browser"
 import { MainNavItem } from "types"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
@@ -18,6 +19,19 @@ interface MainNavProps {
 export function MainNav({ items, children }: MainNavProps) {
   const segment = useSelectedLayoutSegment()
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false)
+
+  React.useEffect(() => {
+    try {
+     mixpanel.init(process.env.MIXPANEL_TOKEN, {
+      debug: true,
+      track_pageview: true,
+      persistence: "localStorage",
+    })
+    console.log("Mixpanel initialized...")
+    } catch (error) {
+      console.log("Mixpanel initialized error...", error)
+    }
+ }, [])
 
   return (
     <div className="flex gap-6 md:gap-10">

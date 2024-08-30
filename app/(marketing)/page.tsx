@@ -10,9 +10,12 @@ import { FeaturesBento } from "@/components/features-bento"
 import { HoverBorderGradient } from "@/components/hover-border-gradient"
 import ScanPreview from "@/components/scan-preview"
 import { Spotlight } from "@/components/spotlight"
+import { FeaturesScroll } from "@/components/features-scroll"
+import { trackEvent } from "@/lib/analytics"
+
+
 
 export default async function IndexPage() {
-
   return (
     <>
       <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
@@ -63,6 +66,7 @@ export default async function IndexPage() {
         id="features"
         className="container bg-slate-50 py-8 dark:bg-transparent"
       >
+        {/* <FeaturesScroll content={featuresContent} /> */}
         <FeaturesBento />
       </section>
       <section id="open-source" className="container py-12 md:py-12 lg:py-24">

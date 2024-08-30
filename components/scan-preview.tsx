@@ -1,42 +1,27 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import {
-  AlertCircle,
-  CheckCircle,
-  CheckCircle2,
-  Code2,
-  FileSearch,
-  ShieldCheck,
-  XCircle,
-} from "lucide-react"
+import React, { useEffect, useState } from "react";
+import { AlertCircle, CheckCircle, CheckCircle2, Code2, FileSearch, Scan, ShieldCheck, XCircle } from "lucide-react";
 
-import { DetectionApiData } from "@/config/detection-apis"
-import { DetectionApiCall } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "./ui/dialog"
-import { Progress } from "./ui/progress"
-import { Separator } from "./ui/separator"
-import { Textarea } from "./ui/textarea"
-import { toast } from "./ui/use-toast"
+
+import { DetectionApiData } from "@/config/detection-apis";
+import { DetectionApiCall } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+
+
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Progress } from "./ui/progress";
+import { Separator } from "./ui/separator";
+import { Textarea } from "./ui/textarea";
+import { toast } from "./ui/use-toast";
+import { trackEvent } from "@/lib/analytics";
+
 
 export default function ScanPreview() {
   const [activeTab, setActiveTab] = useState("transaction")
@@ -47,13 +32,12 @@ export default function ScanPreview() {
     DetectionApiData.SmartContract.body.contract_code
   )
   const [walletAddress, setWalletAddress] = useState(
-    DetectionApiData.Wallet.body.contract_address
+    DetectionApiData.ContractAddress.body.contract_address
   )
   const [transactionSignature, setTransactionSignature] = useState(
     DetectionApiData.Transaction.body.tx_signature
   )
 
-  console.log({ scanResult })
 
   const handleScanApiCall = (res: { ok: boolean; data: any }) => {
     if (res.ok) {
@@ -84,6 +68,7 @@ export default function ScanPreview() {
   }
 
   const handleScan = async (type: string) => {
+    trackEvent("Scan", { type })
     setIsScanning(true)
 
     let res: any = {}
@@ -101,7 +86,7 @@ export default function ScanPreview() {
           notifyNoData()
           return
         }
-        res = await DetectionApiCall(DetectionApiData.Wallet)
+        res = await DetectionApiCall(DetectionApiData.ContractAddress)
         handleScanApiCall(res)
         break
       case "Transaction":
@@ -268,7 +253,7 @@ export default function ScanPreview() {
                   onClick={() => simulateScan("Transaction")}
                   disabled={isScanning}
                 >
-                  {isScanning ? "Scanning..." : "Scan"}
+                  {isScanning ? "Scanning..." : <>Scan</>}
                 </Button>
               </div>
             </CardContent>
@@ -337,7 +322,7 @@ export default function ScanPreview() {
         </Badge>
       </div>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="bg-zinc-900 text-zinc-100 border-zinc-700">
+        <DialogContent className="bg-zinc-900 text-zinc-100 border-zinc-700 min-w-full md:min-w-[1000px]">
           <DialogHeader>
             <DialogTitle>Scan Results</DialogTitle>
             <DialogDescription>{scanResult?.conclusion}</DialogDescription>
