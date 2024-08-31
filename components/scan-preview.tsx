@@ -1,27 +1,43 @@
-"use client";
+"use client"
 
-import React, { useEffect, useState } from "react";
-import { AlertCircle, CheckCircle, CheckCircle2, Code2, FileSearch, Scan, ShieldCheck, XCircle } from "lucide-react";
+import React, { useEffect, useState } from "react"
+import {
+  AlertCircle,
+  CheckCircle,
+  CheckCircle2,
+  Code2,
+  FileSearch,
+  Scan,
+  ShieldCheck,
+  XCircle,
+} from "lucide-react"
 
+import { DetectionApiData } from "@/config/detection-apis"
+import { trackEvent } from "@/lib/analytics"
+import { DetectionApiCall } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-
-import { DetectionApiData } from "@/config/detection-apis";
-import { DetectionApiCall } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-
-
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
-import { Progress } from "./ui/progress";
-import { Separator } from "./ui/separator";
-import { Textarea } from "./ui/textarea";
-import { toast } from "./ui/use-toast";
-import { trackEvent } from "@/lib/analytics";
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog"
+import { Progress } from "./ui/progress"
+import { Separator } from "./ui/separator"
+import { toast } from "./ui/use-toast"
 
 export default function ScanPreview() {
   const [activeTab, setActiveTab] = useState("transaction")
@@ -37,7 +53,6 @@ export default function ScanPreview() {
   const [transactionSignature, setTransactionSignature] = useState(
     DetectionApiData.Transaction.body.tx_signature
   )
-
 
   const handleScanApiCall = (res: { ok: boolean; data: any }) => {
     if (res.ok) {

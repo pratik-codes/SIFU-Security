@@ -10,13 +10,5 @@ export const marketingConfig: MarketingConfig = {
       title: "Explore API",
       href: "/api-explorer",
     },
-    // {
-    //   title: "Blog",
-    //   href: "/blog",
-    // },
-    // {
-    //   title: "Documentation",
-    //   href: "/docs",
-    // },
   ],
 }

@@ -1,12 +1,19 @@
 "use client";
 
-import Link from "next/link"
 import { useEffect, useState } from "react";
-import { Button, buttonVariants } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Spotlight } from "@/components/spotlight"
+import Link from "next/link";
+
+
+
 import { trackEvent } from "@/lib/analytics";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
+import { Spotlight } from "@/components/spotlight";
+
+
+
+
 
 export default function EarlyAccessPage() {
   const [email, setEmail] = useState("")
@@ -16,15 +23,16 @@ export default function EarlyAccessPage() {
   }, [])
 
   const signupHandler = (e) => {
-    e.preventDefault();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+(\.[^\s@]+)*$/;
+    e.preventDefault()
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+(\.[^\s@]+)*$/
     if (emailRegex.test(email)) {
-      trackEvent("early-access-signup", { email });
+      trackEvent("early-access-signup", { email })
       toast({
         title: "Success",
-        description: "You have successfully signed up for early access. We will send you a mail once we are ready to launch.",
+        description:
+          "You have successfully signed up for early access. We will send you a mail once we are ready to launch.",
         duration: 4000,
-      });
+      })
     } else {
       toast({
         title: "Invalid Email",
@@ -33,7 +41,7 @@ export default function EarlyAccessPage() {
         duration: 4000,
       })
     }
-  };
+  }
 
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
@@ -75,3 +83,5 @@ export default function EarlyAccessPage() {
     </section>
   )
 }
+
+
