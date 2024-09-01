@@ -39,6 +39,12 @@ import { Progress } from "./ui/progress"
 import { Separator } from "./ui/separator"
 import { toast } from "./ui/use-toast"
 
+const WarningMessage = { 
+  "RED":"ALERT",
+  "YELLOW":"WARNING",
+  "GREEN":"LOOKS GOOD"
+}
+
 export default function ScanPreview() {
   const [activeTab, setActiveTab] = useState("transaction")
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -222,7 +228,7 @@ export default function ScanPreview() {
               {scanResult.color === "GREEN" && (
                 <CheckCircle className="text-green-500" />
               )}
-              <span className="font-semibold">{scanResult.color}</span>
+              <span className="font-semibold">{WarningMessage[scanResult.color]}</span>
             </div>
             <p>{scanResult.conclusion}</p>
             <div>
@@ -242,7 +248,7 @@ export default function ScanPreview() {
         defaultValue="transaction"
         className="w-full"
       >
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-1 mb-20 md:grid-cols-3">
           <TabsTrigger value="transaction">Transaction Validator</TabsTrigger>
           <TabsTrigger value="address">Address Checker</TabsTrigger>
           <TabsTrigger value="contract">Contract Auditing</TabsTrigger>
@@ -342,7 +348,7 @@ export default function ScanPreview() {
         <DialogContent className="bg-zinc-900 text-zinc-100 border-zinc-700 min-w-full md:min-w-[1000px]">
           <DialogHeader>
             <DialogTitle>Scan Results</DialogTitle>
-            <DialogDescription>{scanResult?.conclusion}</DialogDescription>
+            {/* <DialogDescription>{scanResult?.conclusion}</DialogDescription> */}
           </DialogHeader>
           {renderScanResult()}
         </DialogContent>
