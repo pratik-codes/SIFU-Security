@@ -1,7 +1,7 @@
 import { SiteConfig } from "types"
 
 export const siteConfig: SiteConfig = {
-  name: "SIFU",
+  name: "safe interactions for user",
   description:
     "Shield your sols with sifu’s ultimate security tools",
   url: "",

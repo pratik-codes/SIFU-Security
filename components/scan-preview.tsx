@@ -39,7 +39,7 @@ import { Progress } from "./ui/progress"
 import { Separator } from "./ui/separator"
 import { toast } from "./ui/use-toast"
 
-const WarningMessage = { 
+const WarningMessage = {
   "RED":"ALERT",
   "YELLOW":"WARNING",
   "GREEN":"LOOKS GOOD"
@@ -248,8 +248,8 @@ export default function ScanPreview() {
         defaultValue="transaction"
         className="w-full"
       >
-        <TabsList className="grid w-full grid-cols-1 mb-20 md:grid-cols-3">
-          <TabsTrigger value="transaction">Transaction Validator</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-1 mb-2 grid-cols-3">
+          <TabsTrigger value="transaction" className="word-break">Transaction Validator</TabsTrigger>
           <TabsTrigger value="address">Address Checker</TabsTrigger>
           <TabsTrigger value="contract">Contract Auditing</TabsTrigger>
         </TabsList>

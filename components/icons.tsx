@@ -23,12 +23,16 @@ import {
   Twitter,
   User,
   X,
+  Home,
+  Link,
   type Icon as LucideIcon,
 } from "lucide-react"
 
 export type Icon = LucideIcon
 
 export const Icons = {
+  home: Home,
+  api: Link,
   logo: Command,
   close: X,
   spinner: Loader2,

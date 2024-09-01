@@ -1,10 +1,7 @@
-import Link from "next/link"
-
-import { marketingConfig } from "@/config/marketing"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import { MainNav } from "@/components/main-nav"
+import { FloatingNav } from "@/components/floating-navbar"
+import { Icons } from "@/components/icons";
 import { SiteFooter } from "@/components/site-footer"
+import { Home, LucideProps } from "lucide-react"; // Import the LucideProps type
 
 interface MarketingLayoutProps {
   children: React.ReactNode
@@ -15,22 +12,20 @@ export default async function MarketingLayout({
 }: MarketingLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="container z-40">
-        <div className="flex h-20 items-center justify-between py-6">
-          <MainNav items={marketingConfig.mainNav} />
-          <nav>
-            <Link
-              href="/early-access"
-              className={cn(
-                buttonVariants({ variant: "secondary", size: "sm" }),
-                "px-4"
-              )}
-            >
-              Early access
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <FloatingNav
+        navItems={[
+          {
+            name: "Home",
+            link: "/",
+            icon: <Icons.home />,
+          },
+          {
+            name: "Api Explorer",
+            link: "/api-explorer",
+            icon: <Icons.api />,
+          },
+        ]}
+      />
       <main className="flex-1">{children}</main>
       <SiteFooter />
     </div>

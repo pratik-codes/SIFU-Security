@@ -30,7 +30,7 @@ export default function EarlyAccessPage() {
       toast({
         title: "Success",
         description:
-          "You have successfully signed up for early access. We will send you a mail once we are ready to launch.",
+          "You have successfully signed up for early access. We will send you a mail soon for the oboarding.",
         duration: 4000,
       })
     } else {
@@ -53,11 +53,11 @@ export default function EarlyAccessPage() {
         <div className="flex flex-col items-center space-y-4 text-center">
           <div className="space-y-2">
             <h1 className="text-5xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-              Get early access to sifu api
+              Get access to sifu api
             </h1>
             <p className="mx-auto max-w-[700px] text-gray-500 md:text-lg dark:text-gray-400">
-              Be among the first to experience the future of productivity. Sign
-              up now for exclusive early access and special perks.
+              Be among the first to experience the future of blockchain transaction security. Sign
+              up now for exclusive api access and special perks.
             </p>
           </div>
           <div className="w-full max-w-sm space-y-2">
