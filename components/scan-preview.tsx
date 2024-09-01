@@ -171,6 +171,7 @@ export default function ScanPreview() {
                   {Object.entries(scanResult?.Issues).map(([key, value]) => (
                     <>
                       <span className="font-semibold">{key}:</span> {value}
+                      <br></br>
                     </>
                   ))}
                 </ul>
@@ -184,6 +185,7 @@ export default function ScanPreview() {
                   {Object.entries(scanResult.fixes).map(([key, value]) => (
                     <>
                       <span className="font-semibold">{key}:</span> {value}
+                      <br></br>
                     </>
                   ))}
                 </ul>
