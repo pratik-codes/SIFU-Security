@@ -1,46 +1,28 @@
-import { getToken } from "next-auth/jwt"
-import { withAuth } from "next-auth/middleware"
-import { NextResponse } from "next/server"
+// src/middleware.js
+// or
+// src/app/middleware.js
+// or
+// src/pages/middleware.js
 
-export default withAuth(
-  async function middleware(req) {
-    const token = await getToken({ req })
-    const isAuth = !!token
-    const isAuthPage =
-      req.nextUrl.pathname.startsWith("/login") ||
-      req.nextUrl.pathname.startsWith("/register")
+import { NextResponse } from "next/server";
 
-    if (isAuthPage) {
-      if (isAuth) {
-        return NextResponse.redirect(new URL("/dashboard", req.url))
-      }
+export function middleware() {
+  // retrieve the current response
+  const res = NextResponse.next()
 
-      return null
-    }
+  // add the CORS headers to the response
+  res.headers.append('Access-Control-Allow-Credentials', "true")
+  res.headers.append('Access-Control-Allow-Origin', '*') // replace this your actual origin
+  res.headers.append('Access-Control-Allow-Methods', 'GET,DELETE,PATCH,POST,PUT')
+  res.headers.append(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  )
 
-    if (!isAuth) {
-      let from = req.nextUrl.pathname;
-      if (req.nextUrl.search) {
-        from += req.nextUrl.search;
-      }
+  return res
+}
 
-      return NextResponse.redirect(
-        new URL(`/login?from=${encodeURIComponent(from)}`, req.url)
-      );
-    }
-  },
-  {
-    callbacks: {
-      async authorized() {
-        // This is a work-around for handling redirect on auth pages.
-        // We return true here so that the middleware function above
-        // is always called.
-        return true
-      },
-    },
-  }
-)
-
+// specify the path regex to apply the middleware to
 export const config = {
-  matcher: ["/dashboard/:path*", "/editor/:path*", "/login", "/register"],
+  matcher: '/api/:path*',
 }
