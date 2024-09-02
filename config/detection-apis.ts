@@ -1,4 +1,4 @@
-const ApiUrl = process.env.NEXT_PUBLIC_APP_URL + "/api/scan";
+const ApiUrl = process.env.NEXT_PUBLIC_APP_URL + "api/scan";
 
 export const DetectionApiData = {
   "SmartContract": {
