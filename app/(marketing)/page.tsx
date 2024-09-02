@@ -20,7 +20,7 @@ import { MovingBorderButton } from "@/components/moving-border-button"
 export default async function IndexPage() {
   return (
     <>
-      <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
+      <section id="home" className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
         <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
           <div className="rounded-3xl mt-24 lg:mt-0 bg-muted px-4 text-sm font-medium">
             <svg width="150" height="56" fill="none" viewBox="0 0 332 56">

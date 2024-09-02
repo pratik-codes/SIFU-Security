@@ -61,10 +61,10 @@ export const FloatingNav = ({
           className
         )}
       >
-        <div className="mr-4 flex justify-start items-center space-x-2">
+        <Link href="/#home" className="mr-4 flex justify-start items-center space-x-2">
           <Icons.logo />
           <span className="text-sm font-bold">SIFU</span>
-        </div>
+        </Link>
         {navItems.map((navItem: any, idx: number) => (
           <Link
             key={`link=${idx}`}

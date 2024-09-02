@@ -15,8 +15,8 @@ export default async function MarketingLayout({
       <FloatingNav
         navItems={[
           {
-            name: "Home",
-            link: "/",
+            name: "Features",
+            link: "/#features",
             icon: <Icons.home />,
           },
           {
