@@ -1,22 +1,11 @@
-import { title } from "process"
 import React from "react"
 import Link from "next/link"
 
-import { env } from "@/env.mjs"
-import { siteConfig } from "@/config/site"
-import { trackEvent } from "@/lib/analytics"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import ApiClient from "@/components/api-client"
 import { Features } from "@/components/features"
-import { FeaturesScroll } from "@/components/features-scroll"
-import { HoverBorderGradient } from "@/components/hover-border-gradient"
-import { InViewBasic } from "@/components/inview-basic"
 import ScanPreview from "@/components/scan-preview"
 import { Spotlight } from "@/components/spotlight"
 import { TextEffect } from "@/components/text-effect"
 import { MovingBorderButton } from "@/components/moving-border-button"
-import { Arrow } from "@radix-ui/react-dropdown-menu"
 import { ArrowRight } from "lucide-react"
 
 export default async function IndexPage() {
@@ -86,14 +75,6 @@ export default async function IndexPage() {
                 <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
             </MovingBorderButton>
-            {/* <Link */}
-            {/*   href={siteConfig.links.github} */}
-            {/*   target="_blank" */}
-            {/*   rel="noreferrer" */}
-            {/*   className={cn(buttonVariants({ variant: "outline", size: "lg" }))} */}
-            {/* > */}
-            {/*   GitHub */}
-            {/* </Link> */}
           </div>
         </div>
         <br />

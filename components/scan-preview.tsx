@@ -248,10 +248,12 @@ export default function ScanPreview() {
         defaultValue="transaction"
         className="w-full"
       >
-        <TabsList className="grid w-full grid-cols-1 mb-2 grid-cols-3">
-          <TabsTrigger value="transaction" className="word-break">Transaction Validator</TabsTrigger>
-          <TabsTrigger value="address">Address Checker</TabsTrigger>
-          <TabsTrigger value="contract">Contract Auditing</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-1 mb-2 grid-cols-3 h-fit">
+          <TabsTrigger value="transaction" > <div className="hidden md:block">Transaction Validator</div><div className="block md:hidden">Transaction <br />Validator</div></TabsTrigger>
+           <TabsTrigger value="address" > <div className="hidden md:block">Address Checker</div><div className="block md:hidden">Address <br />Checker</div></TabsTrigger>
+
+         <TabsTrigger value="contract" > <div className="hidden md:block">Contract Auditing</div><div className="block md:hidden">Contract <br />Auditing</div></TabsTrigger>
+
         </TabsList>
         <TabsContent value="transaction">
           <Card>

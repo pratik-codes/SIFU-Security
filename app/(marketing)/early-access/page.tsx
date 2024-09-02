@@ -44,7 +44,7 @@ export default function EarlyAccessPage() {
   }
 
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
+    <section className="w-full py-24 lg:py-32 xl:py-48">
       <Spotlight
         className="-top-50 left-0 md:left-60 md:-top-20"
         fill="white"
