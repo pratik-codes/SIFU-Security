@@ -1,9 +1,3 @@
-// src/middleware.js
-// or
-// src/app/middleware.js
-// or
-// src/pages/middleware.js
-
 import { NextResponse } from "next/server";
 
 export function middleware() {

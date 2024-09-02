@@ -23,7 +23,12 @@ export function absoluteUrl(path: string) {
 
 export const DetectionApiCall = async ({ url, body, method }) => {
   try {
-    const res = await axios.post(url, body)
+    const res = await axios.post(url, body, {
+      headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+      }
+    })
     console.log({ res });
     if (res) {
       return { ok: true, data: res.data.data };
