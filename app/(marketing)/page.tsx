@@ -16,6 +16,8 @@ import ScanPreview from "@/components/scan-preview"
 import { Spotlight } from "@/components/spotlight"
 import { TextEffect } from "@/components/text-effect"
 import { MovingBorderButton } from "@/components/moving-border-button"
+import { Arrow } from "@radix-ui/react-dropdown-menu"
+import { ArrowRight } from "lucide-react"
 
 export default async function IndexPage() {
   return (
@@ -78,9 +80,10 @@ export default async function IndexPage() {
           <MovingBorderButton>
             <Link
                 href="/early-access"
-                className="font-bold"
-            >
-              Get Api Access
+                className="font-bold flex items-center"
+              >
+                Get Api Access
+                <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
             </MovingBorderButton>
             {/* <Link */}
