@@ -15,13 +15,14 @@ import { InViewBasic } from "@/components/inview-basic"
 import ScanPreview from "@/components/scan-preview"
 import { Spotlight } from "@/components/spotlight"
 import { TextEffect } from "@/components/text-effect"
+import { MovingBorderButton } from "@/components/moving-border-button"
 
 export default async function IndexPage() {
   return (
     <>
       <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
         <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
-          <div className="rounded-3xl mt-24 md:mt-0 bg-muted px-4 text-sm font-medium">
+          <div className="rounded-3xl mt-24 lg:mt-0 bg-muted px-4 text-sm font-medium">
             <svg width="150" height="56" fill="none" viewBox="0 0 332 56">
               <path
                 fill="#fff"
@@ -69,25 +70,27 @@ export default async function IndexPage() {
             <p className="mt-2 font-normal text-base text-neutral-300 max-w-xl text-center mx-auto">
 
               <TextEffect per="char" preset="fade">
-                from fraudulent and malicious transactions and smart contracts.
+                from fraudulent and malicious transactions or smart contracts.
               </TextEffect>
             </p>
           </div>
           <div className="space-x-4">
+          <MovingBorderButton>
             <Link
-              href="/early-access"
-              className={cn(buttonVariants({ size: "lg" }))}
+                href="/early-access"
+                className="font-bold"
             >
               Get Api Access
             </Link>
-            <Link
-              href={siteConfig.links.github}
-              target="_blank"
-              rel="noreferrer"
-              className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
-            >
-              GitHub
-            </Link>
+            </MovingBorderButton>
+            {/* <Link */}
+            {/*   href={siteConfig.links.github} */}
+            {/*   target="_blank" */}
+            {/*   rel="noreferrer" */}
+            {/*   className={cn(buttonVariants({ variant: "outline", size: "lg" }))} */}
+            {/* > */}
+            {/*   GitHub */}
+            {/* </Link> */}
           </div>
         </div>
         <br />
@@ -97,30 +100,30 @@ export default async function IndexPage() {
       </section>
 
       {/* feature section */}
-      <section id="features" className="md:w-6/12 mx-auto bg-slate-50 py-8 dark:bg-transparent">
+      <section id="features" className="md:w-8/12 lg:w-6/12 mx-auto bg-slate-50 py-8 dark:bg-transparent">
         <Features />
       </section>
 
-      <section id="open-source" className="container py-12 md:py-12 lg:py-24">
-        <div className="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-centear my-16">
-          <h2 className="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
-            Proudly Open Source
-          </h2>
-          <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
-            SIFU is open source and powered by open source software. <br /> The
-            code is available on{" "}
-            <Link
-              href={"https://github.com/pratik-codes/Blockchain-Audit-Platform"}
-              target="_blank"
-              rel="noreferrer"
-              className="underline underline-offset-4"
-            >
-              GitHub
-            </Link>
-            .{" "}
-          </p>
-        </div>
-      </section>
+      {/* <section id="open-source" className="container py-12 md:py-12 lg:py-24"> */}
+      {/*   <div className="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-centear my-16"> */}
+      {/*     <h2 className="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl"> */}
+      {/*       Proudly Open Source */}
+      {/*     </h2> */}
+      {/*     <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7"> */}
+      {/*       SIFU is open source and powered by open source software. <br /> The */}
+      {/*       code is available on{" "} */}
+      {/*       <Link */}
+      {/*         href={"https://github.com/pratik-codes/Blockchain-Audit-Platform"} */}
+      {/*         target="_blank" */}
+      {/*         rel="noreferrer" */}
+      {/*         className="underline underline-offset-4" */}
+      {/*       > */}
+      {/*         GitHub */}
+      {/*       </Link> */}
+      {/*       .{" "} */}
+      {/*     </p> */}
+      {/*   </div> */}
+      {/* </section> */}
     </>
   )
 }

@@ -8,6 +8,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-
 
 import { cn } from "@/lib/utils";
 import { Home } from "lucide-react";
+import { Icons } from "./icons";
 
 
 
@@ -60,6 +61,10 @@ export const FloatingNav = ({
           className
         )}
       >
+        <div className="mr-4 flex justify-start items-center space-x-2">
+          <Icons.logo />
+          <span className="text-sm font-bold">SIFU</span>
+        </div>
         {navItems.map((navItem: any, idx: number) => (
           <Link
             key={`link=${idx}`}
@@ -69,7 +74,7 @@ export const FloatingNav = ({
             )}
           >
             {/* <span className="h-2 w-2 mr-2">{navItem.icon}</span> */}
-            <span className="text-sm font-bold">{navItem.name}</span>
+            <span className="text-sm font-medium">{navItem.name}</span>
           </Link>
         ))}
         <Link

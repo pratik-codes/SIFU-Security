@@ -63,8 +63,10 @@ const words = `Empowering Blockchain Security with Cutting-Edge Features: Analyz
 export function Features() {
   return (
     <div>
-      <TextGenerateEffect duration={2} filter={false} words={words} className="mb-16 text-center"/>
-      <div className="grid md:grid-cols-3 gap-4 mx-auto">
+      <InView>
+        <TextGenerateEffect duration={2} filter={false} words={words} className="mb-16 text-center"/>
+      </InView>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mx-auto">
         {items.map((item, i) => (
           <Featurecard key={i} {...item} />
         ))}
