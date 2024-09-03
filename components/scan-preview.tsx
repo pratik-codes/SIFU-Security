@@ -1,43 +1,26 @@
-"use client"
+"use client";
 
-import React, { useEffect, useState } from "react"
-import {
-  AlertCircle,
-  CheckCircle,
-  CheckCircle2,
-  Code2,
-  FileSearch,
-  Scan,
-  ShieldCheck,
-  XCircle,
-} from "lucide-react"
+import React, { useEffect, useState } from "react";
+import { AlertCircle, CheckCircle, CheckCircle2, Code2, FileSearch, Scan, ShieldCheck, XCircle } from "lucide-react";
 
-import { DetectionApiData } from "@/config/detection-apis"
-import { trackEvent } from "@/lib/analytics"
-import { DetectionApiCall } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "./ui/dialog"
-import { Progress } from "./ui/progress"
-import { Separator } from "./ui/separator"
-import { toast } from "./ui/use-toast"
+
+import { DetectionApiData } from "@/config/detection-apis";
+import { trackEvent } from "@/lib/analytics";
+import { DetectionApiCall } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+
+
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Progress } from "./ui/progress";
+import { Separator } from "./ui/separator";
+import { toast } from "./ui/use-toast";
+
 
 const WarningMessage = {
   RED: "ALERT",
@@ -46,7 +29,7 @@ const WarningMessage = {
 }
 
 export default function ScanPreview() {
-  const [activeTab, setActiveTab] = useState("SmartContract")
+  const [activeTab, setActiveTab] = useState("address")
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [scanResult, setScanResult] = useState<any>(null)
   const [isScanning, setIsScanning] = useState(false)
@@ -59,6 +42,8 @@ export default function ScanPreview() {
   const [transactionSignature, setTransactionSignature] = useState(
     DetectionApiData.Transaction.body.tx_signature
   )
+
+  console.log("active tab", activeTab)
 
   const handleScanApiCall = (res: { ok: boolean; data: any }) => {
     if (res.ok) {
@@ -253,7 +238,7 @@ export default function ScanPreview() {
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
-        defaultValue="transaction"
+        defaultValue={activeTab}
         className="w-full"
       >
         <TabsList className="grid w-full grid-cols-1 mb-2 grid-cols-3 h-fit">
