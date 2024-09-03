@@ -1,0 +1,62 @@
+Functions found:
+0x00000008    1     16 fcn.00000008
+
+Disassembly (first 1000 instructions):
+0x00000000   tmp:
+0x00000000     02000000bd8a4b6c  invalid
+0x00000008   fcn.00000008:
+0x00000008     57237e2bd087d489  and64 r3, 0x89d487d0
+0x00000010     02bcf9731b599de1  invalid
+0x00000018     3764243161c6924e  div64 r4, 0x4e92c661
+0x00000020     4816f114ffffffff  ldh [r1+0xffffffff]
+0x00000028     ffffffffffffffff  invalid
+0x00000030     ffffffffffffffff  invalid
+0x00000038     ffffffffffffffff  invalid
+0x00000040     ffffffffffffffff  invalid
+0x00000048     ffffffffffffffff  invalid
+0x00000050     ffffffffffffffff  invalid
+0x00000058     ffffffffffffffff  invalid
+0x00000060     ffffffffffffffff  invalid
+0x00000068     ffffffffffffffff  invalid
+0x00000070     ffffffffffffffff  invalid
+0x00000078     ffffffffffffffff  invalid
+0x00000080     ffffffffffffffff  invalid
+0x00000088     ffffffffffffffff  invalid
+0x00000090     ffffffffffffffff  invalid
+0x00000098     ffffffffffffffff  invalid
+0x000000a0     ffffffffffffffff  invalid
+0x000000a8     ffffffffffffffff  invalid
+0x000000b0     ffffffffffffffff  invalid
+0x000000b8     ffffffffffffffff  invalid
+0x000000c0     ffffffffffffffff  invalid
+0x000000c8     ffffffffffffffff  invalid
+0x000000d0     ffffffffffffffff  invalid
+0x000000d8     ffffffffffffffff  invalid
+0x000000e0     ffffffffffffffff  invalid
+0x000000e8     ffffffffffffffff  invalid
+0x000000f0     ffffffffffffffff  invalid
+0x000000f8     ffffffffffffffff  invalid
+0x00000100     ffffffffffffffff  invalid
+0x00000108     ffffffffffffffff  invalid
+0x00000110     ffffffffffffffff  invalid
+0x00000118     ffffffffffffffff  invalid
+0x00000120     ffffffffffffffff  invalid
+0x00000128     ffffffffffffffff  invalid
+0x00000130     ffffffffffffffff  invalid
+0x00000138     ffffffffffffffff  invalid
+0x00000140     ffffffffffffffff  invalid
+0x00000148     ffffffffffffffff  invalid
+0x00000150     ffffffffffffffff  invalid
+0x00000158     ffffffffffffffff  invalid
+0x00000160     ffffffffffffffff  invalid
+0x00000168     ffffffffffffffff  invalid
+0x00000170     ffffffffffffffff  invalid
+0x00000178     ffffffffffffffff  invalid
+0x00000180     ffffffffffffffff  invalid
+0x00000188     ffffffffffffffff  invalid
+0x00000190     ffffffffffffffff  invalid
+0x00000198     ffffffffffffffff  invalid
+0x000001a0     ffffffffffffffff  invalid
+0x000001a8     ffffffffffffffff  invalid
+0x000001b0     ffffffffffffffff  invalid
+0x000001b8     ffffffffffffffff  invalid

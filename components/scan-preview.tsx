@@ -53,7 +53,7 @@ export default function ScanPreview() {
   const [smartContract, setSmartContract] = useState(
     DetectionApiData.SmartContract.body.contract_code
   )
-  const [walletAddress, setWalletAddress] = useState(
+  const [contractAddress, setContractAddress] = useState(
     DetectionApiData.ContractAddress.body.contract_address
   )
   const [transactionSignature, setTransactionSignature] = useState(
@@ -93,21 +93,27 @@ export default function ScanPreview() {
     setIsScanning(true)
 
     let res: any = {}
+    let data: any = {}
+
     switch (type) {
       case "SmartContract":
         if (!smartContract) {
           notifyNoData()
           return
         }
-        res = await DetectionApiCall(DetectionApiData.SmartContract)
+        data = DetectionApiData.SmartContract
+        data.body.contract_code = smartContract
+        res = await DetectionApiCall(data)
         handleScanApiCall(res)
         break
       case "ContractAdress":
-        if (!walletAddress) {
+        if (!contractAddress) {
           notifyNoData()
           return
         }
-        res = await DetectionApiCall(DetectionApiData.ContractAddress)
+        data = DetectionApiData.ContractAddress
+        data.body.contract_address = contractAddress
+        res = await DetectionApiCall(data)
         handleScanApiCall(res)
         break
       case "Transaction":
@@ -115,7 +121,9 @@ export default function ScanPreview() {
           notifyNoData()
           return
         }
-        res = await DetectionApiCall(DetectionApiData.Transaction)
+        data = DetectionApiData.Transaction
+        data.body.tx_signature = transactionSignature
+        res = await DetectionApiCall(data)
         handleScanApiCall(res)
         break
     }
@@ -135,12 +143,10 @@ export default function ScanPreview() {
   ) => {
     switch (type) {
       case "SmartContract":
-        // trim spaces from the input
-        const trimmedInput = e.target.value.replace(/\s/g, "")
         setSmartContract(e.target.value.replace(/\s/g, ""))
         break
       case "ContractAddress":
-        setWalletAddress(e.target.value.replace(/\s/g, ""))
+        setContractAddress(e.target.value.replace(/\s/g, ""))
         break
       case "Transaction":
         setTransactionSignature(e.target.value.replace(/\s/g, ""))
@@ -297,7 +303,7 @@ export default function ScanPreview() {
             <CardContent className="space-y-4">
               <div className="flex space-x-4">
                 <Input
-                  value={walletAddress}
+                  value={contractAddress}
                   onChange={(e) => inputChangeHandler(e, "ContractAddress")}
                   placeholder="Enter contract address"
                   className="flex-grow"
