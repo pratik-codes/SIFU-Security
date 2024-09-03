@@ -45,7 +45,7 @@ export default function ApiClient() {
   console.log({ apiData, scanType })
 
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
+    <div className="container mt-8 mx-auto p-4 max-w-4xl">
       <Spotlight
         className="-top-50 left-0 md:left-60 md:-top-20"
         fill="white"

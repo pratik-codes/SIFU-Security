@@ -101,7 +101,7 @@ export const FloatingNav = ({
               <span className="text-lg font-bold">SIFU</span>
             </Link>
             <Link
-              href="early-access"
+              href="api-explorer"
               className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-4 py-2 rounded-full"
             >
               <span>Explore Api's</span>
