@@ -40,9 +40,9 @@ import { Separator } from "./ui/separator"
 import { toast } from "./ui/use-toast"
 
 const WarningMessage = {
-  "RED":"ALERT",
-  "YELLOW":"WARNING",
-  "GREEN":"LOOKS GOOD"
+  RED: "ALERT",
+  YELLOW: "WARNING",
+  GREEN: "LOOKS GOOD",
 }
 
 export default function ScanPreview() {
@@ -234,9 +234,11 @@ export default function ScanPreview() {
               {scanResult.color === "GREEN" && (
                 <CheckCircle className="text-green-500" />
               )}
-              <span className="font-semibold">{WarningMessage[scanResult.color]}</span>
+              <span className="font-semibold">
+                {WarningMessage[scanResult.color]}
+              </span>
             </div>
-            <p>{scanResult.conclusion}</p>
+            {/* <p>{scanResult.conclusion}</p> */}
             <div>
               <h3 className="font-bold text-lg">Evaluation</h3>
               <p>{scanResult.evaluation}</p>
@@ -255,11 +257,30 @@ export default function ScanPreview() {
         className="w-full"
       >
         <TabsList className="grid w-full grid-cols-1 mb-2 grid-cols-3 h-fit">
-          <TabsTrigger value="transaction" > <div className="hidden md:block">Transaction Validator</div><div className="block md:hidden">Transaction <br />Validator</div></TabsTrigger>
-           <TabsTrigger value="address" > <div className="hidden md:block">Address Checker</div><div className="block md:hidden">Address <br />Checker</div></TabsTrigger>
-
-         <TabsTrigger value="contract" > <div className="hidden md:block">Contract Auditing</div><div className="block md:hidden">Contract <br />Auditing</div></TabsTrigger>
-
+          <TabsTrigger value="address">
+            {" "}
+            <div className="hidden md:block">Address Checker</div>
+            <div className="block md:hidden">
+              Address <br />
+              Checker
+            </div>
+          </TabsTrigger>
+          <TabsTrigger value="contract">
+            {" "}
+            <div className="hidden md:block">Contract Auditing</div>
+            <div className="block md:hidden">
+              Contract <br />
+              Auditing
+            </div>
+          </TabsTrigger>
+          <TabsTrigger value="transaction">
+            {" "}
+            <div className="hidden md:block">Transaction Validator</div>
+            <div className="block md:hidden">
+              Transaction <br />
+              Validator
+            </div>
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="transaction">
           <Card>
@@ -356,7 +377,7 @@ export default function ScanPreview() {
         <DialogContent className="bg-zinc-900 text-zinc-100 border-zinc-700 min-w-full md:min-w-[1000px]">
           <DialogHeader>
             <DialogTitle>Scan Results</DialogTitle>
-            {/* <DialogDescription>{scanResult?.conclusion}</DialogDescription> */}
+            <DialogDescription>{scanResult?.conclusion}</DialogDescription>
           </DialogHeader>
           {renderScanResult()}
         </DialogContent>
