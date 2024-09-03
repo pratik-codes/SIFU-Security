@@ -46,7 +46,7 @@ const WarningMessage = {
 }
 
 export default function ScanPreview() {
-  const [activeTab, setActiveTab] = useState("transaction")
+  const [activeTab, setActiveTab] = useState("SmartContract")
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [scanResult, setScanResult] = useState<any>(null)
   const [isScanning, setIsScanning] = useState(false)
