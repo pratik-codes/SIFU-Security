@@ -84,7 +84,7 @@ export default function ApiClient() {
             </div>
             <pre className="rounded-xl bg-muted/50 p-4 rounded-lg overflow-x-auto border border-border text-start">
               <div>
-                // @ts-ignore
+                {/* @ts-ignore */}
                 <JSONPretty className="rounded-xl" id="json-pretty" data={apiData.body}></JSONPretty>
               </div>
             </pre>
@@ -106,7 +106,8 @@ export default function ApiClient() {
               </h2>
               <pre className="rounded-xl bg-muted/50 p-4 rounded-lg overflow-x-auto border border-border text-start">
                 <div>
-                  // @ts-ignore
+
+                  {/* @ts-ignore */}
                   <JSONPretty id="json-pretty" data={response}></JSONPretty>
                 </div>
               </pre>
