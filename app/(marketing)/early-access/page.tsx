@@ -65,11 +65,11 @@ export default function EarlyAccessPage() {
               <Input
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="max-w-lg flex-1"
+                className="max-w-lg flex-1 rounded-xl"
                 placeholder="Enter your email"
                 type="email"
               />
-              <Button onClick={signupHandler}>Sign Up</Button>
+              <Button className="rounded-xl" onClick={signupHandler}>Sign Up</Button>
             </form>
             <p className="text-xs text-gray-500 dark:text-gray-400">
               By signing up, you agree to our{" "}
