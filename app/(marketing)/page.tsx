@@ -1,17 +1,20 @@
-import React from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
-import { Features } from "@/components/features"
-import FUIFeatureSectionWithCards from "@/components/features-card"
-import { TextGenerateEffect } from "@/components/generate-effect"
-import { MovingBorderButton } from "@/components/moving-border-button"
+
+
+import { Features } from "@/components/features";
+import FUIFeatureSectionWithCards from "@/components/features-card";
+import { TextGenerateEffect } from "@/components/generate-effect";
+import { MovingBorderButton } from "@/components/moving-border-button";
 import ScanPreview from "@/components/scan-preview"
-import TransactionTable from "@/components/transaction-table"
-import WhiteGlow from "@/components/white-glow"
+import WhiteGlow from "@/components/white-glow";
 
-import Hero from "./hero"
+import Hero from "./hero";
+import TransactionTable from "@/components/transaction-table";
+
 
 export default async function IndexPage() {
   return (

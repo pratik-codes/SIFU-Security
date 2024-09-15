@@ -107,7 +107,7 @@ function DialogTrigger({
     <motion.div
       ref={triggerRef}
       layoutId={`dialog-${uniqueId}`}
-      className={cn("relative cursor-pointer", className)}
+      className={cn("relative cursor-pointer rounded-xl", className)}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       style={style}

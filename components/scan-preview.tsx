@@ -36,10 +36,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog"
-import { Progress } from "./ui/progress"
+import ProgressBar from "./ui/progress-bar"
 import { Separator } from "./ui/separator"
-import { toast } from "./ui/use-toast"
 import { Textarea } from "./ui/textarea"
+import { toast } from "./ui/use-toast"
 import WhiteGlow from "./white-glow"
 
 const WarningMessage = {
@@ -145,7 +145,9 @@ export default function ScanPreview({ activeTabDefault }: ScanPreviewProps) {
   }
 
   const inputChangeHandler = (
-    e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>,
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
     type: string
   ) => {
     switch (type) {
@@ -171,30 +173,34 @@ export default function ScanPreview({ activeTabDefault }: ScanPreviewProps) {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <p className="font-semibold">Security Score</p>
-                <Progress
-                  value={scanResult.security_score}
-                  className="w-full"
+                <ProgressBar
+                  progress={scanResult.security_score}
+                  animated={true}
+                  height={16}
                 />
               </div>
               <div className="space-y-2">
                 <p className="font-semibold">Code Quality Score</p>
-                <Progress
-                  value={scanResult.code_quality_score}
-                  className="w-full"
+                <ProgressBar
+                  progress={scanResult.code_quality_score}
+                  animated={true}
+                  height={16}
                 />
               </div>
               <div className="space-y-2">
                 <p className="font-semibold">Gas Efficiency Score</p>
-                <Progress
-                  value={scanResult.gas_efficiency_score}
-                  className="w-full"
+                <ProgressBar
+                  progress={scanResult.gas_efficiency_score}
+                  animated={true}
+                  height={16}
                 />
               </div>
               <div className="space-y-2">
                 <p className="font-semibold">Correctness Score</p>
-                <Progress
-                  value={scanResult.correctness_score}
-                  className="w-full"
+                <ProgressBar
+                  progress={scanResult.correctness_score}
+                  animated={true}
+                  height={16}
                 />
               </div>
             </div>
@@ -266,7 +272,9 @@ export default function ScanPreview({ activeTabDefault }: ScanPreviewProps) {
         <TabsContent value="transaction">
           <Card className="bg-transparent transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset]  space-y-3 p-4 border rounded-xl">
             <CardHeader>
-            <div className="text-white rounded-full p-4 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] w-fit mb-4"><ArrowLeftRight /></div>
+              <div className="text-white rounded-full p-4 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] w-fit mb-4">
+                <ArrowLeftRight />
+              </div>
               <CardTitle>Simulated Transaction Validator</CardTitle>
               <CardDescription>
                 Before you hit "send" on that Solana transaction, let our tool
@@ -281,7 +289,7 @@ export default function ScanPreview({ activeTabDefault }: ScanPreviewProps) {
                   value={transactionSignature}
                   onChange={(e) => inputChangeHandler(e, "Transaction")}
                   placeholder="Enter transaction hash or details"
-                  className="flex-grow"
+                  className="flex-grow rounded-xl"
                 />
                 <Button
                   className="rounded-xl"
@@ -316,9 +324,8 @@ export default function ScanPreview({ activeTabDefault }: ScanPreviewProps) {
                     <path d="M16 12H8" />
                     <path d="M13 16H8" />
                   </svg>{" "}
-
-                  </div>
-               <CardTitle>Contract Address Checker</CardTitle>
+                </div>
+                <CardTitle>Contract Address Checker</CardTitle>
                 <CardDescription>
                   Before you or your wallet interact with any contract, use our
                   analyzer to ensure the activity is safe. Know what's under the
@@ -331,10 +338,10 @@ export default function ScanPreview({ activeTabDefault }: ScanPreviewProps) {
                     value={contractAddress}
                     onChange={(e) => inputChangeHandler(e, "ContractAddress")}
                     placeholder="Enter contract address"
-                    className="flex-grow"
+                    className="flex-grow rounded-xl"
                   />
                   <Button
-                  className="rounded-xl"
+                    className="rounded-xl"
                     onClick={() => simulateScan("ContractAdress")}
                     disabled={isScanning}
                   >
@@ -343,15 +350,14 @@ export default function ScanPreview({ activeTabDefault }: ScanPreviewProps) {
                 </div>
               </CardContent>
             </Card>
-
           </div>
         </TabsContent>
         <TabsContent value="contract">
           <Card className="bg-black bg-transparent transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset]  space-y-3 p-4 border rounded-xl">
             <CardHeader>
-                <div className="text-white rounded-full p-4 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] w-fit mb-4">
+              <div className="text-white rounded-full p-4 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] w-fit mb-4">
                 <ShieldCheck />
-                </div>
+              </div>
               <CardTitle>Smart Contract Auditing</CardTitle>
               <CardDescription>
                 Our comprehensive auditing tool dives deep into smart contracts,
@@ -367,7 +373,7 @@ export default function ScanPreview({ activeTabDefault }: ScanPreviewProps) {
                   value={smartContract}
                   onChange={(e) => inputChangeHandler(e, "SmartContract")}
                   placeholder="Enter contract code or address"
-                  className="flex-grow overflow-hidden bg-transparent"
+                  className="flex-grow overflow-hidden bg-transparent rounded-xl"
                 />
                 <Button
                   className="rounded-xl"
@@ -383,7 +389,7 @@ export default function ScanPreview({ activeTabDefault }: ScanPreviewProps) {
       </Tabs>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="bg-zinc-900 text-zinc-100 border-zinc-700 min-w-full md:min-w-[1000px]">
+        <DialogContent className="bg-zinc-900 text-zinc-100 border-zinc-700 min-w-full md:min-w-[1000px] rounded-xl">
           <DialogHeader>
             <DialogTitle>Scan Results</DialogTitle>
             <DialogDescription>{scanResult?.conclusion}</DialogDescription>

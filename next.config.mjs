@@ -3,6 +3,7 @@ import "./env.mjs";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  swcMinify: false,
   async headers() {
     return [
       {
@@ -38,6 +39,7 @@ const nextConfig = {
     ],
   },
   experimental: {
+    swcMinify: false,
     appDir: true,
     serverComponentsExternalPackages: ["@prisma/client"],
   },
