@@ -1,7 +1,6 @@
-import { ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
 import axios from "axios"
-
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
 import { env } from "@/env.mjs"
 
 export function cn(...inputs: ClassValue[]) {
@@ -23,10 +22,13 @@ export function absoluteUrl(path: string) {
 
 export const DetectionApiCall = async ({ url, body, method }) => {
   try {
-    const res = await axios.post(url, body, {
+    const res = await axios({
+      method: method,
+      url: url,
+      data: body,
       headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
       }
     })
     console.log({ res });

@@ -1,26 +1,46 @@
-"use client";
+"use client"
 
-import React, { useEffect, useState } from "react";
-import { AlertCircle, CheckCircle, CheckCircle2, Code2, FileSearch, Scan, ShieldCheck, XCircle } from "lucide-react";
+import React, { useEffect, useState } from "react"
+import {
+  AlertCircle,
+  ArrowLeftRight,
+  CheckCircle,
+  CheckCircle2,
+  Code2,
+  FileSearch,
+  Scan,
+  ShieldCheck,
+  XCircle,
+} from "lucide-react"
 
+import { DetectionApiData } from "@/config/detection-apis"
+import { trackEvent } from "@/lib/analytics"
+import { DetectionApiCall } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-
-import { DetectionApiData } from "@/config/detection-apis";
-import { trackEvent } from "@/lib/analytics";
-import { DetectionApiCall } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-
-
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
-import { Progress } from "./ui/progress";
-import { Separator } from "./ui/separator";
-import { toast } from "./ui/use-toast";
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog"
+import { Progress } from "./ui/progress"
+import { Separator } from "./ui/separator"
+import { toast } from "./ui/use-toast"
+import { Textarea } from "./ui/textarea"
+import WhiteGlow from "./white-glow"
 
 const WarningMessage = {
   RED: "ALERT",
@@ -28,8 +48,12 @@ const WarningMessage = {
   GREEN: "LOOKS GOOD",
 }
 
-export default function ScanPreview() {
-  const [activeTab, setActiveTab] = useState("address")
+interface ScanPreviewProps {
+  activeTabDefault: string
+}
+
+export default function ScanPreview({ activeTabDefault }: ScanPreviewProps) {
+  const [activeTab, setActiveTab] = useState(activeTabDefault)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [scanResult, setScanResult] = useState<any>(null)
   const [isScanning, setIsScanning] = useState(false)
@@ -42,8 +66,6 @@ export default function ScanPreview() {
   const [transactionSignature, setTransactionSignature] = useState(
     DetectionApiData.Transaction.body.tx_signature
   )
-
-  console.log("active tab", activeTab)
 
   const handleScanApiCall = (res: { ok: boolean; data: any }) => {
     if (res.ok) {
@@ -123,7 +145,7 @@ export default function ScanPreview() {
   }
 
   const inputChangeHandler = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>,
     type: string
   ) => {
     switch (type) {
@@ -234,42 +256,17 @@ export default function ScanPreview() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 space-y-8">
+    <div className="w-full mx-auto p-2">
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
         defaultValue={activeTab}
         className="w-full"
       >
-        <TabsList className="grid w-full grid-cols-1 mb-2 grid-cols-3 h-fit">
-          <TabsTrigger value="address">
-            {" "}
-            <div className="hidden md:block">Address Checker</div>
-            <div className="block md:hidden">
-              Address <br />
-              Checker
-            </div>
-          </TabsTrigger>
-          <TabsTrigger value="contract">
-            {" "}
-            <div className="hidden md:block">Contract Auditing</div>
-            <div className="block md:hidden">
-              Contract <br />
-              Auditing
-            </div>
-          </TabsTrigger>
-          <TabsTrigger value="transaction">
-            {" "}
-            <div className="hidden md:block">Transaction Validator</div>
-            <div className="block md:hidden">
-              Transaction <br />
-              Validator
-            </div>
-          </TabsTrigger>
-        </TabsList>
         <TabsContent value="transaction">
-          <Card>
+          <Card className="bg-transparent transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset]  space-y-3 p-4 border rounded-xl">
             <CardHeader>
+            <div className="text-white rounded-full p-4 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] w-fit mb-4"><ArrowLeftRight /></div>
               <CardTitle>Simulated Transaction Validator</CardTitle>
               <CardDescription>
                 Before you hit "send" on that Solana transaction, let our tool
@@ -287,6 +284,7 @@ export default function ScanPreview() {
                   className="flex-grow"
                 />
                 <Button
+                  className="rounded-xl"
                   onClick={() => simulateScan("Transaction")}
                   disabled={isScanning}
                 >
@@ -297,36 +295,63 @@ export default function ScanPreview() {
           </Card>
         </TabsContent>
         <TabsContent value="address">
-          <Card>
-            <CardHeader>
-              <CardTitle>Contract Address Checker</CardTitle>
-              <CardDescription>
-                Before you or your wallet interact with any contract, use our
-                analyzer to ensure the activity is safe. Know what's under the
-                hood before committing.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex space-x-4">
-                <Input
-                  value={contractAddress}
-                  onChange={(e) => inputChangeHandler(e, "ContractAddress")}
-                  placeholder="Enter contract address"
-                  className="flex-grow"
-                />
-                <Button
-                  onClick={() => simulateScan("ContractAdress")}
-                  disabled={isScanning}
-                >
-                  {isScanning ? "Checking..." : "Check"}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="flex justify-center items-center">
+            <Card className="w-12/12 h-full bg-transparent transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset]  space-y-3 p-4 border rounded-xl">
+              <CardHeader>
+                <div className="text-white rounded-full p-4 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] w-fit mb-4">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    className="lucide lucide-receipt-text"
+                  >
+                    <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" />
+                    <path d="M14 8H8" />
+                    <path d="M16 12H8" />
+                    <path d="M13 16H8" />
+                  </svg>{" "}
+
+                  </div>
+               <CardTitle>Contract Address Checker</CardTitle>
+                <CardDescription>
+                  Before you or your wallet interact with any contract, use our
+                  analyzer to ensure the activity is safe. Know what's under the
+                  hood before committing and be confident in your decisions.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex space-x-4">
+                  <Input
+                    value={contractAddress}
+                    onChange={(e) => inputChangeHandler(e, "ContractAddress")}
+                    placeholder="Enter contract address"
+                    className="flex-grow"
+                  />
+                  <Button
+                  className="rounded-xl"
+                    onClick={() => simulateScan("ContractAdress")}
+                    disabled={isScanning}
+                  >
+                    {isScanning ? "Checking..." : "Check"}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+          </div>
         </TabsContent>
         <TabsContent value="contract">
-          <Card>
+          <Card className="bg-black bg-transparent transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset]  space-y-3 p-4 border rounded-xl">
             <CardHeader>
+                <div className="text-white rounded-full p-4 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] w-fit mb-4">
+                <ShieldCheck />
+                </div>
               <CardTitle>Smart Contract Auditing</CardTitle>
               <CardDescription>
                 Our comprehensive auditing tool dives deep into smart contracts,
@@ -336,13 +361,16 @@ export default function ScanPreview() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex space-x-4">
-                <Input
+                <Textarea
+                  rows={9}
+                  // visibleRows={9}
                   value={smartContract}
                   onChange={(e) => inputChangeHandler(e, "SmartContract")}
                   placeholder="Enter contract code or address"
-                  className="flex-grow"
+                  className="flex-grow overflow-hidden bg-transparent"
                 />
                 <Button
+                  className="rounded-xl"
                   onClick={() => simulateScan("SmartContract")}
                   disabled={isScanning}
                 >
@@ -353,11 +381,7 @@ export default function ScanPreview() {
           </Card>
         </TabsContent>
       </Tabs>
-      <div className="text-center">
-        <Badge variant="outline" className="text-sm">
-          Powered by SIFU
-        </Badge>
-      </div>
+
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="bg-zinc-900 text-zinc-100 border-zinc-700 min-w-full md:min-w-[1000px]">
           <DialogHeader>

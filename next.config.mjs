@@ -1,4 +1,5 @@
-import "./env.mjs"
+import "./env.mjs";
+
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -30,6 +31,10 @@ const nextConfig = {
       "avatars.githubusercontent.com",
       "images.unsplash.com",
       "media.istockphoto.com",
+      "pinetbox.com",
+      "assets.coingecko.com",
+      "cryptologos.cc",
+      "assets.coingecko.com",
     ],
   },
   experimental: {

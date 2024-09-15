@@ -2,7 +2,6 @@ import React from "react";
 
 
 
-import { Featurecard } from "./feature-card";
 import { TextGenerateEffect } from "./generate-effect";
 import { InView } from "./in-view";
 
@@ -67,9 +66,9 @@ export function Features() {
         <TextGenerateEffect duration={2} filter={false} words={words} className="mb-16 text-center"/>
       </InView>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mx-auto">
-        {items.map((item, i) => (
+        {/* {items.map((item, i) => (
           <Featurecard key={i} {...item} />
-        ))}
+        ))} */}
       </div>
     </div>
   )
