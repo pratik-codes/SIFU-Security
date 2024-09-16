@@ -26,7 +26,6 @@ const BadgeColor = {
   MEDIUM: "bg-yellow-700",
   LOW: "bg-green-700",
 }
-
 type Transaction = {
   signature: string
   alert_status: string
@@ -38,6 +37,12 @@ type Transaction = {
   contract_address: string
 }
 
+const FailedAnalysis =
+  "This transaction is malicious. A user is trying to exploit the contract. Please take action immediately."
+const MediumAnalysis =
+  "This transaction is suspicious. This could be a exploit attempt. Please verify the transaction."
+const PassedAnalysis =
+  "This transaction is safe. No suspicious activity found. This is a simple swap."
 const data: Transaction[] = [
   {
     signature:
@@ -47,8 +52,7 @@ const data: Transaction[] = [
     contract_name: "Jupiter",
     timestamp: "2024-09-12 14:05:12",
     score: 95,
-    analysis:
-      "Transaction failed due to slippage tolerance exceeded, indicating an attempt to exploit price fluctuations.",
+    analysis: FailedAnalysis,
     contract_address: "1 minute ago",
   },
   {
@@ -59,8 +63,7 @@ const data: Transaction[] = [
     contract_name: "Jito",
     timestamp: "1 minute ago",
     score: 90,
-    analysis:
-      "The transaction failed due to a gas limit error, suggesting potential inefficiency in contract execution.",
+    analysis: MediumAnalysis,
     contract_address: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
   },
   {
@@ -71,8 +74,7 @@ const data: Transaction[] = [
     contract_name: "Jupiter",
     timestamp: "10 minute ago",
     score: 75,
-    analysis:
-      "This transaction encountered a timeout error, possibly due to network latency or congestion.",
+    analysis: PassedAnalysis,
     contract_address: "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
   },
   {
@@ -83,8 +85,7 @@ const data: Transaction[] = [
     contract_name: "Jito",
     timestamp: "7 minute ago",
     score: 98,
-    analysis:
-      "The transaction failed because the contract's call function was interrupted, possibly due to an external force.",
+    analysis: FailedAnalysis,
     contract_address: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
   },
   {
@@ -95,8 +96,7 @@ const data: Transaction[] = [
     contract_name: "Jupiter",
     timestamp: "7 minute ago",
     score: 85,
-    analysis:
-      "Transaction failed due to a contract verification error, possibly a result of outdated code execution.",
+    analysis: MediumAnalysis,
     contract_address: "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
   },
   {
@@ -107,8 +107,7 @@ const data: Transaction[] = [
     contract_name: "Jito",
     timestamp: "6 minute ago",
     score: 100,
-    analysis:
-      "The transaction failed due to slippage tolerance exceeded, indicating attempts to manipulate price changes.",
+    analysis: FailedAnalysis,
     contract_address: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
   },
   {
@@ -119,8 +118,7 @@ const data: Transaction[] = [
     contract_name: "Jupiter",
     timestamp: "5 minute ago",
     score: 60,
-    analysis:
-      "Detected abnormal behavior with the contract call which may suggest a custom fraud attempt.",
+    analysis: PassedAnalysis,
     contract_address: "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
   },
   {
@@ -131,8 +129,7 @@ const data: Transaction[] = [
     contract_name: "Jito",
     timestamp: "5 minute ago",
     score: 88,
-    analysis:
-      "Failed due to gas fees not being met; possible inefficiency or misuse in contract logic.",
+    analysis: MediumAnalysis,
     contract_address: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
   },
   {
@@ -143,8 +140,7 @@ const data: Transaction[] = [
     contract_name: "Jupiter",
     timestamp: "4 minute ago",
     score: 99,
-    analysis:
-      "Transaction failed due to a gas limit exceeded error, which could indicate congestion or inefficiency in the contract.",
+    analysis: FailedAnalysis,
     contract_address: "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
   },
   {
@@ -155,8 +151,7 @@ const data: Transaction[] = [
     contract_name: "Jito",
     timestamp: "3 minute ago",
     score: 93,
-    analysis:
-      "Transaction failed due to unusual contract call patterns, potentially indicating an exploit attempt.",
+    analysis: MediumAnalysis,
     contract_address: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
   },
   {
@@ -167,8 +162,7 @@ const data: Transaction[] = [
     contract_name: "Jupiter",
     timestamp: "2 minute ago",
     score: 98,
-    analysis:
-      "Transaction failed due to a timeout, likely caused by high network congestion during execution.",
+    analysis: FailedAnalysis,
     contract_address: "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
   },
   {
@@ -179,8 +173,7 @@ const data: Transaction[] = [
     contract_name: "Jito",
     timestamp: "1 minute ago",
     score: 100,
-    analysis:
-      "The transaction failed due to a slippage tolerance exceeded error. This indicates an attempt to exploit the contract by trying to take advantage of price fluctuations.",
+    analysis: FailedAnalysis,
     contract_address: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
   },
 ]
@@ -206,7 +199,7 @@ export default function TransactionTable() {
 
     addRows()
     isFirstRender.current = false
- }
+  }
 
   useEffect(() => {
     getInitalData()
@@ -215,18 +208,29 @@ export default function TransactionTable() {
     return () => clearInterval(interval)
   }, [])
 
-
   const addNewData = useCallback(() => {
-    const newItem: Transaction = {
+    const newItem: any = {
       signature: `${Math.random().toString(36).substr(2, 9)}...`,
       alert_status: ["HIGH", "LOW", "MEDIUM"][Math.floor(Math.random() * 3)],
       contract_name: ["Jito", "Jupiter"][Math.floor(Math.random() * 2)],
       timestamp: "some seconds ago",
-      score: [100, 89, 76, 93][Math.floor(Math.random() * 4)],
-      analysis:
-        "The transaction failed due to a slippage tolerance exceeded error. This indicates an attempt to exploit the contract by trying to take advantage of price fluctuations.",
       contract_address: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
       custom_detection: "No Custom Fraud Found",
+    }
+
+    if (newItem.alert_status === "HIGH") {
+      newItem.analysis = FailedAnalysis
+      newItem.score = [100, 89, 93][Math.floor(Math.random() * 4)]
+    }
+
+    if (newItem.alert_status === "MEDIUM") {
+      newItem.analysis = MediumAnalysis
+      newItem.score = [55, 65, 78, 41][Math.floor(Math.random() * 4)]
+    }
+
+    if (newItem.alert_status === "LOW") {
+      newItem.analysis = PassedAnalysis
+      newItem.score = [21, 11, 21, 9][Math.floor(Math.random() * 4)]
     }
 
     setVisibleRows((prevData) => [newItem, ...prevData.slice(0, 9)])
@@ -237,7 +241,7 @@ export default function TransactionTable() {
       <div className="flex">
         <div className="text-center mb-1 mr-1 absolute top-0 left-0 mt-6 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] ml-8 rounded-full">
           <Badge variant="outline" className="text-sm">
-            Realtime transactions powered by SIFU
+            On-Chain + Off-Chain realtime fraud prevention for smart contracts
           </Badge>
         </div>
       </div>
@@ -311,7 +315,7 @@ export default function TransactionTable() {
                       <Tooltip>
                         <TooltipTrigger>
                           <p className="max-w-xs">
-                            {row.analysis.substring(0, 31)}...
+                            {row.analysis.substring(0, 30)}...
                           </p>
                         </TooltipTrigger>
                         <TooltipContent>
