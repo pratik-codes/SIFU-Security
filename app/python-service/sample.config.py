@@ -18,6 +18,12 @@ CONTRACT_ANALYSIS_PROMPT=""
 TRANSACTION_ANALYSIS_PROMPT=""
 CONTRACT_CODE_ANALYSIS_PROMPT=""
 
+# Constants
+RATE_LIMIT = 200  # Maximum requests allowed
+TIME_PERIOD = 24 * 60 * 60  # Time period in seconds (24 hours)
+DYNAMODB_REGION="us-east-1"
+DYNAMODB_TABLE="ip_rate_limmiter"
+
 # Optional: Set default values if environment variables are not set
 if SOLANA_RPC_ENDPOINT is None:
     raise ValueError("SOLANA_RPC_ENDPOINT is not set in the environment variables")

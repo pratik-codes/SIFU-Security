@@ -2,14 +2,14 @@
 """
 Module for analyzing Solana contract, transaction, and code data using Google Gen AI.
 """
-
+import random
 import google.generativeai as genai
 from config import LLM_API_KEY, LLM_MODEL_NAME, CONTRACT_ANALYSIS_PROMPT, TRANSACTION_ANALYSIS_PROMPT, CONTRACT_CODE_ANALYSIS_PROMPT
 
 class LLMAnalyzer:
     def __init__(self, api_key: str = LLM_API_KEY):
         # Configure Google Gen AI with the provided API key
-        genai.configure(api_key=api_key)
+        genai.configure(api_key=random.choice(api_key))
         self.model_name = LLM_MODEL_NAME
 
     def analyze_contract(self, data: dict):
@@ -57,7 +57,7 @@ class LLMAnalyzer:
         )
 
         # Combine transaction data and simulation data into a single input for the LLM
-        input_data = f"Transaction Data:\n{transaction_data}\n\nSimulation Result:\n{simulation_data}"
+        input_data = f"Transaction Data:\n{transaction_data}\n"
 
         # Send the combined input to the LLM for analysis
         response = chat_session.start_chat(
