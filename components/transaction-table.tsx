@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { AnimatePresence, motion } from "framer-motion"
-import { Info } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -20,12 +19,18 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { DetectionApiCall } from "@/lib/utils"
+import { DetectionApiData } from "@/config/detection-apis"
+import { add } from "date-fns"
 
 const BadgeColor = {
   HIGH: "bg-red-700",
   MEDIUM: "bg-yellow-700",
   LOW: "bg-green-700",
 }
+
+const MAX_ROWS = 10
+
 type Transaction = {
   signature: string
   alert_status: string
@@ -37,210 +42,63 @@ type Transaction = {
   contract_address: string
 }
 
-const FailedAnalysis =
-  "This transaction is malicious. A user is trying to exploit the contract. Please take action immediately."
-const MediumAnalysis =
-  "This transaction is suspicious. This could be a exploit attempt. Please verify the transaction."
-const PassedAnalysis =
-  "This transaction is safe. No suspicious activity found. This is a simple swap."
-const data: Transaction[] = [
-  {
-    signature:
-      "6y4tAQs7wxRZj67D7tPSJsgQxoM86ER34FDG8YFASFFSDASFASEoN1uW8wP7odAr1HgUYtp71ByMNujs4WzNZ36V7efLNRjfLHEcUhH",
-    alert_status: "HIGH",
-    custom_detection: "No Custom Fraud Found",
-    contract_name: "Jupiter",
-    timestamp: "2024-09-12 14:05:12",
-    score: 95,
-    analysis: FailedAnalysis,
-    contract_address: "1 minute ago",
-  },
-  {
-    signature:
-      "5zbmPpLAEhCEi4epNYo1GkLmWhzbHajYg58cfafwJzPFT8g8J9KoUU7ChdBCpftxPdWgNnZe1K15vyJKrkeSbDDQPp",
-    alert_status: "MEDIUM",
-    custom_detection: "Suspicious Timing Found",
-    contract_name: "Jito",
-    timestamp: "1 minute ago",
-    score: 90,
-    analysis: MediumAnalysis,
-    contract_address: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
-  },
-  {
-    signature:
-      "4pq5XHhL1FrSkFBFYsdi4vDqdfo1ASD171eKmPKakof5CUHFnwoDWMB7p7snFu5WYuCVaSL1E54u2heMY99Yz2sKEVXg",
-    alert_status: "LOW",
-    custom_detection: "No Custom Fraud Found",
-    contract_name: "Jupiter",
-    timestamp: "10 minute ago",
-    score: 75,
-    analysis: PassedAnalysis,
-    contract_address: "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
-  },
-  {
-    signature:
-      "8gQuJkQ3WFvon8vVKgaySkNfaZ4WxUFHx4kqBAhWAHSebeE1uYNK6J5uxeeLox5jAH28Fy6HtqCBN1otQ4bizhin",
-    alert_status: "HIGH",
-    custom_detection: "Anomaly in Contract Call",
-    contract_name: "Jito",
-    timestamp: "7 minute ago",
-    score: 98,
-    analysis: FailedAnalysis,
-    contract_address: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
-  },
-  {
-    signature:
-      "1y4tAQs7wxRZj67D7tPSJsgQxoM86ER45TWAVSEsEoN1uW8wP7odAr1HgUYtp71ByMNujs4WzNZ36V7efLNRjfLHEcUhH",
-    alert_status: "MEDIUM",
-    custom_detection: "No Custom Fraud Found",
-    contract_name: "Jupiter",
-    timestamp: "7 minute ago",
-    score: 85,
-    analysis: MediumAnalysis,
-    contract_address: "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
-  },
-  {
-    signature:
-      "9bmPpLAEhCEi4epNYo1GkLmWhzbHajYg58cffsgsggsdfg7ChdBCpftxPdWgNnZe1K15vyJKrkeSbDDQPp",
-    alert_status: "HIGH",
-    custom_detection: "No Custom Fraud Found",
-    contract_name: "Jito",
-    timestamp: "6 minute ago",
-    score: 100,
-    analysis: FailedAnalysis,
-    contract_address: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
-  },
-  {
-    signature:
-      "2pq5XHhL1FrSkFBFYsdi4vDqdfo181eKmPKakof5CUHFnwoDWMB7p7snFu5WYuCVaSL1E54u2heMY99Yz2sKEVXg",
-    alert_status: "LOW",
-    custom_detection: "Custom Fraud Found",
-    contract_name: "Jupiter",
-    timestamp: "5 minute ago",
-    score: 60,
-    analysis: PassedAnalysis,
-    contract_address: "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
-  },
-  {
-    signature:
-      "7gQuJkQ3WFvon8vVKgaySkNfaZ4WxUFHx4kqBAhWAHSebeE1uYNK6J5uxeeLox5jAH28Fy6HtqCBN1otQ4bizhin",
-    alert_status: "MEDIUM",
-    custom_detection: "No Custom Fraud Found",
-    contract_name: "Jito",
-    timestamp: "5 minute ago",
-    score: 88,
-    analysis: MediumAnalysis,
-    contract_address: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
-  },
-  {
-    signature:
-      "4y4tAQs7wxRZj67D7tPSJsgQxoM86fsdfASFAWwP7odAr1HgUYtp71ByMNujs4WzNZ36V7efLNRjfLHEcUhHSsB93k",
-    alert_status: "HIGH",
-    custom_detection: "No Custom Fraud Found",
-    contract_name: "Jupiter",
-    timestamp: "4 minute ago",
-    score: 99,
-    analysis: FailedAnalysis,
-    contract_address: "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
-  },
-  {
-    signature:
-      "5bmPpLAEhCEi4epNYo1GkLmWhzbHajYg58cfwJzPFT8g8J9KoUU7ChdBCpftxPdWgNnZe1K15vyJKrkeSbDDQPp",
-    alert_status: "MEDIUM",
-    custom_detection: "Unusual Contract Activity",
-    contract_name: "Jito",
-    timestamp: "3 minute ago",
-    score: 93,
-    analysis: MediumAnalysis,
-    contract_address: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
-  },
-  {
-    signature:
-      "3pq5XHhL1FrSkFBFYsdi4vDqdfo151eKmPKakof5CUHFnwoDWMB7p7snFu5WYuCVaSL1E54u2heMY99Yz2sKEVXg",
-    alert_status: "HIGH",
-    custom_detection: "No Custom Fraud Found",
-    contract_name: "Jupiter",
-    timestamp: "2 minute ago",
-    score: 98,
-    analysis: FailedAnalysis,
-    contract_address: "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
-  },
-  {
-    signature:
-      "39bmPpLAEhCEi4epNYo1GkLASDFASDFmWhzbHajYg58cffgsdfgsdfwJzPFT8g8J9KoUU7ChdBCpftxPdWgNnZe1K15vyJKrkeSbDDQPp",
-    alert_status: "HIGH",
-    custom_detection: "No Custom Fraud Found",
-    contract_name: "Jito",
-    timestamp: "1 minute ago",
-    score: 100,
-    analysis: FailedAnalysis,
-    contract_address: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
-  },
-]
-
-const MAX_ROWS = 10
-
 export default function TransactionTable() {
   const [visibleRows, setVisibleRows] = useState<Transaction[]>([])
   const isFirstRender = useRef(true)
 
+  const fetchTableData = async (initialData = false) => {
+    console.log("Fetching data...", initialData);
+    const response = await DetectionApiCall(DetectionApiData.ContractTransactions);
+    if (response?.ok) {
+      return response?.data;
+    }
+  };
+
   const getInitalData = async () => {
     if (!isFirstRender.current) return // Avoid running the effect on the second render in dev mode
 
-    const addRows = async () => {
-      const reversedData = [...data].reverse() // Reverse the data to render from the last record
+    // fetching table intial table data
+    const data = await fetchTableData(true);
 
+    const reversedData = data;
+
+    const addRows = async (data: any) => {
       // Step 1: Render the next 8 records, one at a time, with a 400ms delay between each
-      for (let i = 0; i < 10 && i < reversedData.length; i++) {
+      for (let i = 0; i < MAX_ROWS && i < reversedData.length; i++) {
+        console.log("Adding row", i, reversedData[i]);
         await new Promise((resolve) => setTimeout(resolve, 400)) // 400ms delay between each record
         setVisibleRows((prev) => [...prev, reversedData[i]])
       }
     }
+    addRows(reversedData);
 
-    addRows()
     isFirstRender.current = false
   }
 
+  // const addNewData = async () => {
+  //   const data = await fetchTableData();
+  //   const reversedData = data;
+  //   if (visibleRows.length >= MAX_ROWS) {
+  //     setVisibleRows((prev) => {
+  //     const newRows = [...prev]
+  //     newRows.shift()
+  //     return newRows
+  //     })
+  //   }
+  //   setVisibleRows((prev) => [...prev, reversedData[0]])
+  // };
+  //
   useEffect(() => {
-    getInitalData()
-
-    const interval = setInterval(addNewData, 10000)
-    return () => clearInterval(interval)
-  }, [])
-
-  const addNewData = useCallback(() => {
-    const newItem: any = {
-      signature: `${Math.random().toString(36).substr(2, 9)}...`,
-      alert_status: ["HIGH", "LOW", "MEDIUM"][Math.floor(Math.random() * 3)],
-      contract_name: ["Jito", "Jupiter"][Math.floor(Math.random() * 2)],
-      timestamp: "some seconds ago",
-      contract_address: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
-      custom_detection: "No Custom Fraud Found",
-    }
-
-    if (newItem.alert_status === "HIGH") {
-      newItem.analysis = FailedAnalysis
-      newItem.score = [100, 89, 93][Math.floor(Math.random() * 4)]
-    }
-
-    if (newItem.alert_status === "MEDIUM") {
-      newItem.analysis = MediumAnalysis
-      newItem.score = [55, 65, 78, 41][Math.floor(Math.random() * 4)]
-    }
-
-    if (newItem.alert_status === "LOW") {
-      newItem.analysis = PassedAnalysis
-      newItem.score = [21, 11, 21, 9][Math.floor(Math.random() * 4)]
-    }
-
-    setVisibleRows((prevData) => [newItem, ...prevData.slice(0, 9)])
+    getInitalData();
+    // const interval = setInterval(addNewData, 3000)
+    // return () => clearInterval(interval)
   }, [])
 
   return (
     <div className="container relative md:w-7/12 mx-auto py-10 px-4 text-white border-12 border-white">
       <div className="flex">
-        <div className="text-center mb-1 mr-1 absolute top-0 left-0 mt-6 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] ml-8 rounded-full">
-          <Badge variant="outline" className="text-sm">
+        <div className="text-center mb-1 mr-1 absolute top-0 left-0 mt-6 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] ml-3 md:ml-8 rounded-full">
+          <Badge variant="outline" className="text-xs md:text-sm">
             On-Chain + Off-Chain realtime fraud prevention for smart contracts
           </Badge>
         </div>
@@ -287,25 +145,27 @@ export default function TransactionTable() {
                       {row.alert_status}
                     </Badge>
                   </TableCell>
-                  <TableCell className="border-b border-muted/50 flex items-center">
-                    {row.contract_name === "Jito" ? (
-                      <Image
-                        src="https://assets.coingecko.com/coins/images/33228/standard/jto.png?1701137022"
-                        alt={row.contract_name}
-                        className="h-6 w-6 mr-2 bg-white rounded-full"
-                        width={30}
-                        height={30}
-                      />
-                    ) : (
-                      <Image
-                        src="https://cryptologos.cc/logos/jupiter-ag-jup-logo.svg"
-                        alt={row.contract_name}
-                        className="h-6 w-6 mr-2"
-                        width={30}
-                        height={30}
-                      />
-                    )}
-                    {row.contract_name}
+                  <TableCell className="border-b border-muted/50">
+                    <div className="flex items-center h-full">
+                      {row.contract_name === "Jito" ? (
+                        <Image
+                          src="https://assets.coingecko.com/coins/images/33228/standard/jto.png?1701137022"
+                          alt={row.contract_name}
+                          className="h-6 w-6 mr-2 bg-white rounded-full"
+                          width={30}
+                          height={30}
+                        />
+                      ) : (
+                        <Image
+                          src="https://cryptologos.cc/logos/jupiter-ag-jup-logo.svg"
+                          alt={row.contract_name}
+                          className="h-6 w-6 mr-2"
+                          width={30}
+                          height={30}
+                        />
+                      )}
+                      {row.contract_name}
+                    </div>
                   </TableCell>
                   <TableCell className="border-b border-muted/50 font-bold text-md">
                     {row.score}
