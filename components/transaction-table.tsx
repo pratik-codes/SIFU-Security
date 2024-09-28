@@ -19,9 +19,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { DetectionApiCall } from "@/lib/utils"
+import { DetectionApiCall, getTimeAgo } from "@/lib/utils"
 import { DetectionApiData } from "@/config/detection-apis"
-import { add } from "date-fns"
+import { Skeleton } from "@/components/ui/skeleton"
 
 const BadgeColor = {
   HIGH: "bg-red-700",
@@ -62,7 +62,7 @@ export default function TransactionTable() {
 
     const reversedData = data;
 
-    const addRows = async (data: any) => {
+    const addRows = async (reversedData: any) => {
       // Step 1: Render the next 8 records, one at a time, with a 400ms delay between each
       for (let i = 0; i < MAX_ROWS && i < reversedData.length; i++) {
         console.log("Adding row", i, reversedData[i]);
@@ -75,31 +75,33 @@ export default function TransactionTable() {
     isFirstRender.current = false
   }
 
-  // const addNewData = async () => {
-  //   const data = await fetchTableData();
-  //   const reversedData = data;
-  //   if (visibleRows.length >= MAX_ROWS) {
-  //     setVisibleRows((prev) => {
-  //     const newRows = [...prev]
-  //     newRows.shift()
-  //     return newRows
-  //     })
-  //   }
-  //   setVisibleRows((prev) => [...prev, reversedData[0]])
-  // };
-  //
+  const getRealTimeData = async () => {
+    const data = await fetchTableData();
+    const reversedData = data;
+    const addRows = async (reversedData: any) => {
+      // Step 1: Render the next 8 records, one at a time, with a 400ms delay between each
+      for (let i = 0; i < MAX_ROWS && i < reversedData.length; i++) {
+        console.log("Adding row", i, reversedData[i]);
+        await new Promise((resolve) => setTimeout(resolve, 180000)) // delay before adding the row
+        setVisibleRows((prev) => [...prev, reversedData[i]])
+      }
+    }
+    addRows(reversedData);
+  };
+
+
   useEffect(() => {
     getInitalData();
-    // const interval = setInterval(addNewData, 3000)
-    // return () => clearInterval(interval)
+    const interval = setInterval(getRealTimeData, 50000)
+    return () => clearInterval(interval)
   }, [])
 
   return (
     <div className="container relative md:w-7/12 mx-auto py-10 px-4 text-white border-12 border-white">
       <div className="flex">
         <div className="text-center mb-1 mr-1 absolute top-0 left-0 mt-6 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] ml-3 md:ml-8 rounded-full">
-          <Badge variant="outline" className="text-xs md:text-sm">
-            On-Chain + Off-Chain realtime fraud prevention for smart contracts
+          <Badge variant="outline" className="text-xs md:text-sm px-[0.3rem] bg-black">
+            On-Chain + Off-Chain realtime fraud analysis for smart contracts <Badge variant="destructive" className="bg-red-900 ml-2 text-xs md:text-sm">Live</Badge>
           </Badge>
         </div>
       </div>
@@ -124,6 +126,23 @@ export default function TransactionTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
+            {isFirstRender.current && (
+              Array.from({ length: MAX_ROWS }).map((_, index) => (
+                <TableRow key={index}>
+                  <TableCell><Skeleton className="h-4 w-20 rounded" /></TableCell>
+                  <TableCell><Skeleton className="h-6 w-16 rounded-full" /></TableCell>
+                  <TableCell>
+                    <div className="flex items-center">
+                      <Skeleton className="h-6 w-6 rounded-full mr-2" />
+                      <Skeleton className="h-4 w-20 rounded" />
+                    </div>
+                  </TableCell>
+                  <TableCell><Skeleton className="h-4 w-8 rounded" /></TableCell>
+                  <TableCell><Skeleton className="h-4 w-32 rounded" /></TableCell>
+                  <TableCell><Skeleton className="h-4 w-24 rounded" /></TableCell>
+                </TableRow>
+              ))
+            )}
             <AnimatePresence initial={false}>
               {visibleRows.map((row) => (
                 <motion.tr
@@ -185,7 +204,7 @@ export default function TransactionTable() {
                     </TooltipProvider>
                   </TableCell>
                   <TableCell className="border-b border-muted/50">
-                    {row.timestamp}
+                    {getTimeAgo(row.timestamp)}
                   </TableCell>
                 </motion.tr>
               ))}

@@ -40,3 +40,22 @@ export const DetectionApiCall = async ({ url, body, method }) => {
     return { error: error, ok: false }
   }
 }
+
+export const getTimeAgo = (timestamp) => {
+  const now: any = new Date();
+  const time: any = new Date(timestamp);
+  const secondsAgo = Math.floor((now - time) / 1000);
+
+  if (secondsAgo < 60) {
+    return `${secondsAgo} seconds ago`;
+  } else if (secondsAgo < 3600) {
+    const minutesAgo = Math.floor(secondsAgo / 60);
+    return `${minutesAgo} minutes ago`;
+  } else if (secondsAgo < 86400) {
+    const hoursAgo = Math.floor(secondsAgo / 3600);
+    return `${hoursAgo} hours ago`;
+  } else {
+    const daysAgo = Math.floor(secondsAgo / 86400);
+    return `${daysAgo} days ago`;
+  }
+};
