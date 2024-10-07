@@ -28,9 +28,25 @@ export const DetectionApiData = {
     method: "POST",
   },
   "ContractTransactions": {
-       url: GetTransactionApiUrl + "?timestamp=" + new Date(Date.now() - 30 * 6000000).toISOString(),
-    // url: GetTransactionApiUrl + "?timestamp=" + "2024-09-27%2017:23:34",
+    url: GetTransactionApiUrl + "?timestamp=" + new Date(Date.now() - 60 * 60 * 1000).toISOString(),
     method: "Get",
     body: {},
   },
 }
+
+
+// // Get current UTC time
+// const now = new Date();
+// const utcTimeString = now.toISOString();
+// console.log('Current UTC time:', utcTimeString);
+
+// // You can also get individual UTC components:
+// const utcYear = now.getUTCFullYear();
+// const utcMonth = now.getUTCMonth() + 1; // getUTCMonth() returns 0-11
+// const utcDay = now.getUTCDate();
+// const utcHours = now.getUTCHours();
+// const utcMinutes = now.getUTCMinutes();
+// const utcSeconds = now.getUTCSeconds();
+
+// console.log(`UTC Date: ${utcYear}-${utcMonth}-${utcDay}`);
+// console.log(`UTC Time: ${utcHours}:${utcMinutes}:${utcSeconds}`);
