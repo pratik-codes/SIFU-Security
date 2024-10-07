@@ -111,7 +111,7 @@ export default function TransactionTable() {
         <div className="flex">
           <div className="absolute mt-[4rem] text-center absolute top-0 left-0 mt-6 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] ml-3 md:ml-8 rounded-full">
             <Badge variant="outline" className="text-xs md:text-sm px-[0.3rem] bg-black">
-              On-Chain + Off-Chain realtime fraud analysis for smart contracts <Badge variant="destructive" className="bg-red-900 ml-2 text-xs md:text-sm">Live</Badge>
+              On-Chain + Off-Chain realtime fraud analysis<Badge variant="destructive" className="bg-red-900 ml-2 text-xs md:text-sm">Live</Badge>
             </Badge>
           </div>
         </div>
