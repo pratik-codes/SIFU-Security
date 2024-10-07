@@ -59,7 +59,7 @@ export default function TransactionTable() {
 
   const addRows = async (data: any, intervalSeconds = 400) => {
     // Step 1: Render the next 8 records, one at a time, with a 400ms delay between each
-    for (let i = 0; i < MAX_ROWS && i < data.length; i++) {
+    for (let i = 0; i < MAX_ROWS && i < data?.length; i++) {
       console.log("Adding row", i, data[i]);
       await new Promise((resolve) => setTimeout(resolve, intervalSeconds)) // 400ms delay between each record
       setVisibleRows((prev) => [...prev, data[i]])
@@ -90,7 +90,7 @@ export default function TransactionTable() {
     })
 
     // Progressive rendering for additional rows
-    if (filteredData.length > MAX_ROWS) {
+    if (filteredData?.length > MAX_ROWS) {
       addRows(filteredData.slice(MAX_ROWS)) // Add the remaining rows with delay
     }
   }
