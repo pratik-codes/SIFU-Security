@@ -36,6 +36,8 @@ const nextConfig = {
       "assets.coingecko.com",
       "cryptologos.cc",
       "assets.coingecko.com",
+      "pump.fun",
+      "www.alchemy.com"
     ],
   },
   experimental: {

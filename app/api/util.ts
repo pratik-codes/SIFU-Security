@@ -36,6 +36,10 @@ export const ScanApiCall = async ({ body, headers, method }) => {
 
 export const GetScanResult = async (timeStamp: string) => {
   console.log({ timeStamp });
+
+  // print the curl request
+  console.log(`curl -X GET "${GetTransactionUrl}?timestamp=${timeStamp}" -H "x-api-key: ${process.env.AUTH_KEY_TRANSACTION}"`);
+
   try {
     const res = await axios({
       method: "GET",

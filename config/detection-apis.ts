@@ -1,3 +1,5 @@
+import { getTransactionTimestamp } from "@/lib/utils";
+
 const ApiUrl = process.env.NEXT_PUBLIC_APP_URL + "api/scan";
 const ScanTypeApiUrl = process.env.NEXT_PUBLIC_APP_URL + "api/scan?type=SCAN";
 const GetTransactionApiUrl = process.env.NEXT_PUBLIC_APP_URL + "api/scan";
@@ -28,12 +30,11 @@ export const DetectionApiData = {
     method: "POST",
   },
   "ContractTransactions": {
-    url: GetTransactionApiUrl + "?timestamp=" + new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+    url: GetTransactionApiUrl + "?timestamp=" + getTransactionTimestamp(),
     method: "Get",
     body: {},
   },
 }
-
 
 // // Get current UTC time
 // const now = new Date();

@@ -14,6 +14,14 @@ import { Radio } from "lucide-react";
 
 import TransactionFilters from "./transaction-filters";
 
+const contractNameIconUrl = {
+  "Jito": "https://assets.coingecko.com/coins/images/33228/standard/jto.png?1701137022",
+  "Jupiter": "https://cryptologos.cc/logos/jupiter-ag-jup-logo.svg",
+  "Pump.fun": "https://pump.fun/icon.png?c2a22dd8671140c9",
+  "Drift": "https://www.alchemy.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Falchemy-website%2Fimage%2Fupload%2Fv1694675914%2Fdapp-store%2Fdapp-logos%2FDrift.jpg&w=640&q=75",
+  "Marinade Finance": "https://www.alchemy.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Falchemy-website%2Fimage%2Fupload%2Fv1694675441%2Fdapp-store%2Fdapp-logos%2FMarinade%2520Finance.jpg&w=256&q=75",
+}
+
 const BadgeColor = {
   HIGH: "bg-red-700",
   MEDIUM: "bg-yellow-700",
@@ -177,23 +185,13 @@ export default function TransactionTable() {
                     </TableCell>
                     <TableCell className="border-b border-muted/50">
                       <div className="flex items-center h-full">
-                        {row.contract_name === "Jito" ? (
-                          <Image
-                            src="https://assets.coingecko.com/coins/images/33228/standard/jto.png?1701137022"
-                            alt={row.contract_name}
-                            className="h-6 w-6 mr-2 bg-white rounded-full"
-                            width={30}
-                            height={30}
-                          />
-                        ) : (
-                          <Image
-                            src="https://cryptologos.cc/logos/jupiter-ag-jup-logo.svg"
-                            alt={row.contract_name}
-                            className="h-6 w-6 mr-2"
-                            width={30}
-                            height={30}
-                          />
-                        )}
+                        <Image
+                          src={contractNameIconUrl[row.contract_name] || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_vY92rGy3lnjj_4FNLkxKJ8t2cwKQBRGrew&s"}
+                          alt={row.contract_name}
+                          className="h-6 w-6 mr-2 bg-white rounded-full"
+                          width={30}
+                          height={30}
+                        />
                         {row.contract_name}
                       </div>
                     </TableCell>

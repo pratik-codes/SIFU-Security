@@ -36,7 +36,11 @@ export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
     const currentTimeStampUTC = new Date().toISOString();
-    let timestamp = url.searchParams.get("timestamp") || currentTimeStampUTC;
+    let timestamp = url.searchParams.get("timestamp");
+
+    if (!timestamp) {
+      return new Response(null, { status: 400 })
+    }
 
     const response: any = await GetScanResult(timestamp);
     console.log("API RESPONSE: ", { response });
