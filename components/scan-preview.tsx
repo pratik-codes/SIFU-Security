@@ -5,10 +5,6 @@ import {
   AlertCircle,
   ArrowLeftRight,
   CheckCircle,
-  CheckCircle2,
-  Code2,
-  FileSearch,
-  Scan,
   ShieldCheck,
   XCircle,
 } from "lucide-react"
@@ -16,18 +12,16 @@ import {
 import { DetectionApiData } from "@/config/detection-apis"
 import { trackEvent } from "@/lib/analytics"
 import { DetectionApiCall } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent } from "@/components/ui/tabs"
 
 import {
   Dialog,
@@ -40,7 +34,6 @@ import ProgressBar from "./ui/progress-bar"
 import { Separator } from "./ui/separator"
 import { Textarea } from "./ui/textarea"
 import { toast } from "./ui/use-toast"
-import WhiteGlow from "./white-glow"
 
 const WarningMessage = {
   RED: "ALERT",

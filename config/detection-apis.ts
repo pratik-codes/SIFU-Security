@@ -28,7 +28,8 @@ export const DetectionApiData = {
     method: "POST",
   },
   "ContractTransactions": {
-    url: GetTransactionApiUrl + "?timestamp=" + new Date().toISOString(),
+       url: GetTransactionApiUrl + "?timestamp=" + new Date(Date.now() - 30 * 6000000).toISOString(),
+    // url: GetTransactionApiUrl + "?timestamp=" + "2024-09-27%2017:23:34",
     method: "Get",
     body: {},
   },

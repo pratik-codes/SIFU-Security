@@ -7,12 +7,13 @@ const ApiUrl = {
   "SCAN": ScanApiUrl,
   "GET_TRANSACTION": GetTransactionUrl
 }
+
 const extraHeaders = {
   'Content-Type': 'application/json',
-  'x-api-key': process.env.AUTH_KEY,
+  'x-api-key': process.env.AUTH_KEY_TRANSACTION,
 }
 
-export const ScanApiCall = async ({ body, headers, method}) => {
+export const ScanApiCall = async ({ body, headers, method }) => {
   try {
     const res = await axios({
       method: method,
@@ -34,6 +35,7 @@ export const ScanApiCall = async ({ body, headers, method}) => {
 };
 
 export const GetScanResult = async (timeStamp: string) => {
+  console.log({ timeStamp });
   try {
     const res = await axios({
       method: "GET",
