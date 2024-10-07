@@ -76,7 +76,7 @@ export default function TransactionTable() {
 
   // get all the unique daap name from the data and only calculate when the data changes
   const uniqueDaapNames = Array.from(
-    new Set(data.map((row) => row.contract_name))
+    new Set(data?.map((row) => row.contract_name))
   )
 
   const onFilterChange = (type = "all", name = "") => {

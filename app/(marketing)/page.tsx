@@ -17,7 +17,6 @@ export default async function IndexPage() {
         className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:pt-32"
       >
         <Hero />
-        {/* PLAYGROUND SECTION */}
         {/* TRANSACTION TABLE */}
         <div className="border-neutral-200">
           <div className="flex flex-col">
@@ -34,7 +33,7 @@ export default async function IndexPage() {
 
       <section className="my-[8rem] md:w-8/12 mx-auto relative">
         <ChainAnalyzerDesc />
-        </section>
+      </section>
 
       {/* feature section */}
       <section
@@ -49,7 +48,6 @@ export default async function IndexPage() {
         <h3 className="text-gray-200 mt-4 text-3xl font-bold font-geist tracking-tighter md:text-5xl sm:text-4xl text-center mb-8">
           More tools to help you analyze and detect fraud
         </h3>
-        {/* <hr className="bg-white/30 h-px w-4/12 mx-auto mb-8 mt-5" /> */}
         <WhiteGlow />
         <div className="md:flex">
           <div className="md:w-6/12">
@@ -64,6 +62,6 @@ export default async function IndexPage() {
         </div>
       </section>
 
-   </>
+    </>
   )
 }
