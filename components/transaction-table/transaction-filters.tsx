@@ -11,7 +11,7 @@ import {
 import { Button } from '../ui/button';
 import { MinusCircle } from "lucide-react";
 
-const TransactionFilters = ({ daaps, onFilterSelect }: { daaps: Array<string>, onFilterSelect: (type: string, name: string) => void }) => {
+const TransactionFilters = ({ daaps, onFilterSelect, addingRows }: { daaps: Array<string>, onFilterSelect: (type: string, name: string) => void, addingRows: boolean }) => {
   const [selectedDaap, setSelectedDaap] = React.useState<string | null>(null)
   const [selectedStatus, setSelectedStatus] = React.useState<string | null>(null)
 
@@ -32,12 +32,12 @@ const TransactionFilters = ({ daaps, onFilterSelect }: { daaps: Array<string>, o
       </div>
       <div className="flex space-x-1">
         <div>
-          <Button variant="ghost" onClick={() => handleFilterSelect("all", "")}>
+          <Button disabled={addingRows} variant="ghost" onClick={() => handleFilterSelect("all", "")}>
             <MinusCircle className="w-6 h-6" />
           </Button>
         </div>
         <div>
-          <Select onValueChange={(e) => handleFilterSelect(selectedStatus || "all", e)}>
+          <Select disabled={addingRows} onValueChange={(e) => handleFilterSelect(selectedStatus || "all", e)}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter Daap" />
             </SelectTrigger>
@@ -53,7 +53,7 @@ const TransactionFilters = ({ daaps, onFilterSelect }: { daaps: Array<string>, o
           </Select>
         </div>
         <div>
-          <Select onValueChange={(e) => {
+          <Select disabled={addingRows} onValueChange={(e) => {
             handleFilterSelect(e, selectedDaap || "")
           }}>
             <SelectTrigger className="w-[180px]"> <SelectValue placeholder="Filter Status" />

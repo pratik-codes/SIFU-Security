@@ -41,10 +41,13 @@ export const DetectionApiCall = async ({ url, body, method }) => {
   }
 }
 
-export const getTimeAgo = (timestamp) => {
-  const now: any = new Date();
-  const time: any = new Date(timestamp);
-  const secondsAgo = Math.floor((now - time) / 1000);
+export const getTimeAgo = (timestamp: string) => {
+  // Replace the space between date and time with 'T' to make it ISO-compliant
+  const isoTimestamp = timestamp.replace(' ', 'T') + 'Z'; // Adding 'Z' to indicate UTC
+
+  const now = new Date(); // Current time in UTC
+  const time = new Date(isoTimestamp); // Parsed time in UTC
+  const secondsAgo = Math.floor((now.getTime() - time.getTime()) / 1000); // Calculate time difference in seconds
 
   if (secondsAgo < 60) {
     return `${secondsAgo} seconds ago`;
@@ -63,7 +66,7 @@ export const getTimeAgo = (timestamp) => {
 export const getTransactionTimestamp = (): string => {
   const now = new Date();
 
-  now.setUTCMinutes(now.getUTCMinutes() - 10);
+  now.setUTCMinutes(now.getUTCMinutes() - 20);
 
   const year = now.getUTCFullYear();
   const month = String(now.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-indexed

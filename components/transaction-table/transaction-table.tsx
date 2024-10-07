@@ -19,7 +19,7 @@ const contractNameIconUrl = {
   "Jupiter": "https://cryptologos.cc/logos/jupiter-ag-jup-logo.svg",
   "Pump.fun": "https://pump.fun/icon.png?c2a22dd8671140c9",
   "Drift": "https://www.alchemy.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Falchemy-website%2Fimage%2Fupload%2Fv1694675914%2Fdapp-store%2Fdapp-logos%2FDrift.jpg&w=640&q=75",
-  "Marinade Finance": "https://www.alchemy.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Falchemy-website%2Fimage%2Fupload%2Fv1694675441%2Fdapp-store%2Fdapp-logos%2FMarinade%2520Finance.jpg&w=256&q=75",
+  "Mariande Finance": "https://www.alchemy.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Falchemy-website%2Fimage%2Fupload%2Fv1694675441%2Fdapp-store%2Fdapp-logos%2FMarinade%2520Finance.jpg&w=256&q=75"
 }
 
 const BadgeColor = {
@@ -44,10 +44,10 @@ type Transaction = {
 export default function TransactionTable() {
   const [visibleRows, setVisibleRows] = useState<Transaction[]>([])
   const [data, setData] = useState<Transaction[]>([]);
+  const [addingRows, setAddingRows] = useState(false);
   const isFirstRender = useRef(true)
 
-  const fetchTableData = async (initialData = false) => {
-    console.log("Fetching data...", initialData);
+  const fetchTableData = async () => {
     const response = await DetectionApiCall(DetectionApiData.ContractTransactions);
     if (response?.ok) {
       return response?.data;
@@ -55,9 +55,8 @@ export default function TransactionTable() {
   };
 
   const getInitalData = async () => {
-
     // fetching table intial table data
-    const data = await fetchTableData(true);
+    const data = await fetchTableData();
 
     const reversedData = data;
 
@@ -66,21 +65,33 @@ export default function TransactionTable() {
   }
 
   const addRows = async (data: any, intervalSeconds = 400) => {
+    setAddingRows(true);
+    let limit = 0;
+    if (data.length >= 10) {
+      limit = 10;
+    } else {
+      limit = data.length;
+    }
+
+    console.log("Adding rows", limit);
+
     // Step 1: Render the next 8 records, one at a time, with a 400ms delay between each
-    for (let i = 0; i < MAX_ROWS && i < data?.length; i++) {
+    for (let i = 0; i < limit; i++) {
       console.log("Adding row", i, data[i]);
       await new Promise((resolve) => setTimeout(resolve, intervalSeconds)) // 400ms delay between each record
       setVisibleRows((prev) => [...prev, data[i]])
     }
+
+    setAddingRows(false);
   }
 
-  const getRealTimeData = async () => {
-    const data = await fetchTableData();
-    const reversedData = data;
-    console.log("Realtime data", reversedData);
-    setData(reversedData);
-    addRows(reversedData);
-  };
+  // const getRealTimeData = async () => {
+  //   const data = await fetchTableData();
+  //   const reversedData = data;
+  //   console.log("Realtime data", reversedData);
+  //   setData(reversedData);
+  //   addRows(reversedData);
+  // };
 
   // get all the unique daap name from the data and only calculate when the data changes
   const uniqueDaapNames = Array.from(
@@ -96,11 +107,13 @@ export default function TransactionTable() {
         (name === "" || row.contract_name === name)
       );
     })
+    console.log("Filtered data", filteredData);
 
     // Progressive rendering for additional rows
-    if (filteredData?.length > MAX_ROWS) {
-      addRows(filteredData.slice(MAX_ROWS)) // Add the remaining rows with delay
+    if (filteredData.length <= MAX_ROWS) {
+      addRows(filteredData)
     }
+    addRows(filteredData.slice(MAX_ROWS)) // Add the remaining rows with delay
   }
 
   useEffect(() => {
@@ -114,7 +127,7 @@ export default function TransactionTable() {
   return (
     <div className="relative md:w-7/12 mx-auto py-10 px-4 container">
       <div className="flex justify-end">
-        <TransactionFilters daaps={uniqueDaapNames} onFilterSelect={(type, name) => onFilterChange(type, name)} />
+        <TransactionFilters daaps={uniqueDaapNames} onFilterSelect={(type, name) => onFilterChange(type, name)} addingRows={addingRows} />
       </div>
       <div className="text-white border-12 border-white">
         <div className="flex">
