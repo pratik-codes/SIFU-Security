@@ -58,18 +58,28 @@ export default function TransactionTable() {
     // fetching table intial table data
     const data = await fetchTableData();
 
-    const reversedData = data;
+    const reversedData = data.reverse();
 
     setData(reversedData);
     addRows(reversedData);
+    if (reversedData.length > MAX_ROWS) {
+      setTimeout(() => {
+        addRows(reversedData.slice(MAX_ROWS, data.length), 2000, true)
+      }, 6000)
+    }
+
   }
 
-  const addRows = async (data: any, intervalSeconds = 400) => {
+  const addRows = async (data: any, intervalSeconds = 400, maxLimit = false) => {
     setAddingRows(true);
     let limit = 0;
-    if (data.length >= 10) {
+    if (data.length >= MAX_ROWS) {
       limit = 10;
     } else {
+      limit = data.length;
+    }
+
+    if (maxLimit) {
       limit = data.length;
     }
 
@@ -79,19 +89,11 @@ export default function TransactionTable() {
     for (let i = 0; i < limit; i++) {
       console.log("Adding row", i, data[i]);
       await new Promise((resolve) => setTimeout(resolve, intervalSeconds)) // 400ms delay between each record
-      setVisibleRows((prev) => [...prev, data[i]])
+      setVisibleRows((prev) => [data[i], ...prev])
     }
 
     setAddingRows(false);
   }
-
-  // const getRealTimeData = async () => {
-  //   const data = await fetchTableData();
-  //   const reversedData = data;
-  //   console.log("Realtime data", reversedData);
-  //   setData(reversedData);
-  //   addRows(reversedData);
-  // };
 
   // get all the unique daap name from the data and only calculate when the data changes
   const uniqueDaapNames = Array.from(
@@ -107,6 +109,7 @@ export default function TransactionTable() {
         (name === "" || row.contract_name === name)
       );
     })
+
     console.log("Filtered data", filteredData);
 
     // Progressive rendering for additional rows
@@ -119,7 +122,7 @@ export default function TransactionTable() {
   useEffect(() => {
     if (!isFirstRender.current) return // Avoid running the effect on the second render in dev mode
     getInitalData();
-    const interval = setInterval(addRows, 50000)
+    const interval = setInterval(addRows, 10000)
     isFirstRender.current = false
     return () => clearInterval(interval)
   }, [])
