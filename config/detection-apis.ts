@@ -34,6 +34,11 @@ export const DetectionApiData = {
     method: "Get",
     body: {},
   },
+  "OnChainTransaction": {
+    url: GetTransactionApiUrl + "?timestamp=" + getTransactionTimestamp(),
+    method: "Get",
+    body: {},
+  }
 }
 
 // // Get current UTC time

@@ -14,7 +14,6 @@ export async function POST(req: Request) {
   try {
     const json = await req.json()
     const headers = req.headers;
-    const body = scanSchema.parse(json)
     const response: any = await ScanApiCall({ body: json, headers: headers, method: "POST" });
     console.log("API RESPONSE: ", { response });
     if (!response.ok) {

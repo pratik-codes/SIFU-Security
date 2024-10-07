@@ -8,9 +8,14 @@ const ApiUrl = {
   "GET_TRANSACTION": GetTransactionUrl
 }
 
-const extraHeaders = {
+const transactionExtraHeaders = {
   'Content-Type': 'application/json',
   'x-api-key': process.env.AUTH_KEY_TRANSACTION,
+}
+
+const scanExtraHeaders = {
+  'Content-Type': 'application/json',
+  'x-api-key': process.env.AUTH_KEY,
 }
 
 export const ScanApiCall = async ({ body, headers, method }) => {
@@ -19,7 +24,7 @@ export const ScanApiCall = async ({ body, headers, method }) => {
       method: method,
       url: ScanApiUrl,
       data: body,
-      headers: { ...headers, ...extraHeaders },
+      headers: { ...headers, ...scanExtraHeaders }
     });
 
     if (res.status === 200) {
@@ -44,7 +49,7 @@ export const GetScanResult = async (timeStamp: string) => {
     const res = await axios({
       method: "GET",
       url: GetTransactionUrl + "?timestamp=" + timeStamp,
-      headers: extraHeaders,
+      headers: transactionExtraHeaders,
     });
 
     if (res.status === 200) {

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Code, Loader2, Send } from "lucide-react"
+import { Send } from "lucide-react"
 import JSONPretty from "react-json-pretty"
 
 import { DetectionApiData } from "@/config/detection-apis"
@@ -15,10 +15,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 
 import { Spotlight } from "./spotlight"
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
+import { Card, CardContent } from "./ui/card"
 
 export default function ApiClient() {
   const [method, setMethod] = useState("POST")
@@ -42,6 +41,7 @@ export default function ApiClient() {
     const newData = DetectionApiData[type]
     setApiData({ ...newData })
   }
+
   console.log({ apiData, scanType })
 
   return (
