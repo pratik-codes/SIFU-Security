@@ -27,7 +27,7 @@ const Hero = () => {
         />
       </div>
       <Spotlight
-        className="-top-50 left-0 md:left-60 md:-top-20"
+        className="-top-50 left-0 fixed md:left-60 md:-top-20"
         fill="white"
       />
       <div className="md:mt-2 mt-0 p-4 max-w-8xl mx-auto relative z-10 w-full md:pt-0">
