@@ -47,6 +47,10 @@ export default function TransactionTable() {
   const [addingRows, setAddingRows] = useState(false);
   const isFirstRender = useRef(true)
 
+  useEffect(() => {
+    console.log(visibleRows);
+  }, [visibleRows])
+
   const fetchTableData = async () => {
     const response = await DetectionApiCall(DetectionApiData.ContractTransactions);
     if (response?.ok) {
@@ -58,16 +62,10 @@ export default function TransactionTable() {
     // fetching table intial table data
     const data = await fetchTableData();
 
-    const reversedData = data.reverse();
+    const reversedData = data;
 
     setData(reversedData);
     addRows(reversedData);
-    if (reversedData.length > MAX_ROWS) {
-      setTimeout(() => {
-        addRows(reversedData.slice(MAX_ROWS, data.length), 2000, true)
-      }, 6000)
-    }
-
   }
 
   const addRows = async (data: any, intervalSeconds = 400, maxLimit = false) => {
@@ -89,7 +87,7 @@ export default function TransactionTable() {
     for (let i = 0; i < limit; i++) {
       console.log("Adding row", i, data[i]);
       await new Promise((resolve) => setTimeout(resolve, intervalSeconds)) // 400ms delay between each record
-      setVisibleRows((prev) => [data[i], ...prev])
+      setVisibleRows((prev) => [...prev, data[i]])
     }
 
     setAddingRows(false);
@@ -128,7 +126,7 @@ export default function TransactionTable() {
   }, [])
 
   return (
-    <div className="relative md:w-7/12 mx-auto py-10 px-4 container">
+    <div className="relative xl:w-8/12 md:w-7/12 mx-auto py-10 px-4 container">
       <div className="flex justify-end">
         <TransactionFilters daaps={uniqueDaapNames} onFilterSelect={(type, name) => onFilterChange(type, name)} addingRows={addingRows} />
       </div>
@@ -179,9 +177,9 @@ export default function TransactionTable() {
                 ))
               )}
               <AnimatePresence initial={false}>
-                {visibleRows.map((row) => (
+                {visibleRows.map((row, index) => (
                   <motion.tr
-                    key={row.signature}
+                    key={index}
                     initial={{ opacity: 0, y: -50 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 50 }}
@@ -215,16 +213,18 @@ export default function TransactionTable() {
                       {row.score}
                     </TableCell>
                     <TableCell className="border-b border-muted/50">
+
+
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>
                             <p className="max-w-xs">
                               {row.analysis.substring(0, 30)}...
                             </p>
+                            <TooltipContent>
+                              <p className="max-w-xs">{row.analysis}</p>
+                            </TooltipContent>
                           </TooltipTrigger>
-                          <TooltipContent>
-                            <p className="max-w-xs">{row.analysis}</p>
-                          </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
                     </TableCell>

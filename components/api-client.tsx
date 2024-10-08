@@ -1,34 +1,43 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Send } from "lucide-react"
-import JSONPretty from "react-json-pretty"
+import { useState } from "react";
+import { Send } from "lucide-react";
+import JSONPretty from "react-json-pretty";
 
-import { DetectionApiData } from "@/config/detection-apis"
-import { DetectionApiCall } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 
-import { Spotlight } from "./spotlight"
-import { Card, CardContent } from "./ui/card"
+
+import { DetectionApiData } from "@/config/detection-apis";
+import { DetectionApiCall } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+
+
+import { Spotlight } from "./spotlight";
+import { Card, CardContent } from "./ui/card";
+
 
 export default function ApiClient() {
-  const [method, setMethod] = useState("POST")
-  const [scanType, setScanType] = useState("Transaction")
-  const [apiData, setApiData] = useState(DetectionApiData.Transaction)
-  const [response, setResponse] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+  const [method, setMethod] = useState("Post");
+  const [scanType, setScanType] = useState("OnChainTransaction");
+  const [apiData, setApiData] = useState(DetectionApiData.OnChainTransaction);
+  const [response, setResponse] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    if (["OnChainTransaction", "OffChainTransaction"].includes(scanType)) {
+      const data = DetectionApiData[scanType]
+      // sleep for 500 ms
+      await new Promise((resolve) => setTimeout(resolve, 900));
+      console.log({ data });
+      setResponse(JSON.stringify(data.response));
+      setIsLoading(false)
+      return;
+    }
+
     const apiCallData = DetectionApiData[scanType]
     const res = await DetectionApiCall(apiCallData)
     setResponse(JSON.stringify(res))
@@ -42,8 +51,6 @@ export default function ApiClient() {
     setApiData({ ...newData })
   }
 
-  console.log({ apiData, scanType })
-
   return (
     <div className="container mt-8 mx-auto p-4 max-w-4xl">
       <Spotlight
@@ -54,19 +61,21 @@ export default function ApiClient() {
         <CardContent className="mt-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2">
-              <Select value={method} onValueChange={setMethod}>
+              <Select value={apiData?.method || method} onValueChange={setMethod}>
                 <SelectTrigger className="w-full sm:w-[250px] rounded-xl">
                   <SelectValue className="rounded-xl" placeholder="Method" />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl">
-                  <SelectItem className="rounded-xl" value="POST">POST</SelectItem>
+                  <SelectItem className="rounded-xl" value="Post">Post</SelectItem>
+                  <SelectItem className="rounded-xl" value="Get">Get</SelectItem>
                 </SelectContent>
               </Select>
               <Input
                 readOnly={true}
                 type="text"
                 placeholder="Enter API URL"
-                value={"https://api.sifu.com/scan"}
+                value={apiData?.showUrl || "https://api.sifu.com/scan"}
+                // vaule={apiData.url}
                 className="flex-grow rounded-xl"
               />
               <Select value={scanType} onValueChange={changeScanType}>
@@ -74,12 +83,14 @@ export default function ApiClient() {
                   <SelectValue placeholder="Select scan type rounded-xl" />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl">
+                  <SelectItem className="rounded-xl" value="OnChainTransaction">On-Chain Analysis</SelectItem>
+                  <SelectItem className="rounded-xl" value="OffChainTransaction">Off-Chain Transactions</SelectItem>
                   <SelectItem className="rounded-xl" value="Transaction">Scan transactions</SelectItem>
                   <SelectItem className="rounded-xl" value="SmartContract">Scan contract</SelectItem>
                   <SelectItem className="rounded-xl" value="ContractAddress">
                     Scan contract address
                   </SelectItem>
-                </SelectContent>
+               </SelectContent>
               </Select>
             </div>
             <pre className="rounded-xl bg-muted/50 p-4 rounded-lg overflow-x-auto border border-border text-start">
