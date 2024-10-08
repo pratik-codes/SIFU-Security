@@ -14,9 +14,15 @@ import { toast } from "@/components/ui/use-toast";
 
 
 
-export default function SolanaPool() {
+export default function SolanaPool({
+  mainTitle,
+  mainDescription,
+  contractAddress,
+  poolType,
+}: any) {
   const [isConnected, setIsConnected] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [history, setHistory] = useState<any>([])
   const [poolBalance, setPoolBalance] = useState(1000000) // 1 SOL
   const [userDeposit, setUserDeposit] = useState(0)
   const [amount, setAmount] = useState("")
@@ -44,6 +50,14 @@ export default function SolanaPool() {
       setPoolBalance((prev) => prev + depositAmount)
       setUserDeposit((prev) => prev + depositAmount)
       setAmount("")
+      setHistory([
+        ...history,
+        {
+          type: "deposit",
+          amount: depositAmount,
+          poolType,
+        },
+      ])
       setIsLoading(false)
      toast({
        title: "Success",
@@ -57,11 +71,22 @@ export default function SolanaPool() {
     const withdrawAmount = Number(amount) * 1000000 // Convert to lamports
     if (withdrawAmount > 0) {
       setIsLoading(true)
-      await simulateDelay(2000)
+      await simulateDelay(4000)
+      console.log("withdrawAmount", withdrawAmount)
+      console.log("userDeposit", userDeposit)
       if (withdrawAmount <= userDeposit) {
         setPoolBalance((prev) => prev - withdrawAmount)
         setUserDeposit((prev) => prev - withdrawAmount)
       } else {
+        if (withdrawAmount > userDeposit && poolType === "sifu") {
+          toast({
+            title: "Error",
+            description: "Transaction failed",
+            variant: "destructive",
+          })
+          setIsLoading(false)
+          return
+        }
         const remainingWithdraw = withdrawAmount - userDeposit
         setPoolBalance((prev) => prev - withdrawAmount)
         setUserDeposit(0)
@@ -84,11 +109,18 @@ export default function SolanaPool() {
   }
 
   return (
-    <div className="min-h-screen  ml-3 md:ml-8 rounded-full] flex items-center justify-center p-4">
-      <Card className="w-full max-w-md transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] ml-3 md:ml-8 rounded-xl">
+    <div className="ml-3 md:ml-8 rounded-full] flex items-center justify-center p-4">
+      <Card className="transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] ml-3 md:ml-8 rounded-xl">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Solana Pool</CardTitle>
-          <CardDescription>Deposit and withdraw funds</CardDescription>
+          <CardTitle className="text-2xl font-bold">
+            {mainTitle}
+          </CardTitle>
+          <CardDescription>
+            {mainDescription}
+          </CardDescription>
+           <CardDescription>
+            <span>Contract address: {contractAddress}</span>
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {!isConnected ? (
@@ -98,7 +130,7 @@ export default function SolanaPool() {
               disabled={isLoading}
             >
               {isLoading ? (
-                "Connecting..."
+                "Please approve and connect the wallet..."
               ) : (
                 <>
                   <Wallet className="mr-2 h-4 w-4" /> Connect Wallet
