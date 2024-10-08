@@ -72,11 +72,15 @@ export default function TransactionTable() {
     setData(reversedData);
 
     // addRows(reversedData, 400, false, true)
-    addRows(reversedData.slice(MAX_ROWS, Math.min(MAX_ROWS + 10, reversedData.length)), 400, false, true);
+    const dataLengthMinus10 = data.length - 10;
+    const dataLength = data.length;
+
+    console.log("Data length", dataLength, dataLengthMinus10);
+    addRows(reversedData.slice(dataLengthMinus10, dataLength), 400, false, true);
     if (reversedData.length > MAX_ROWS) {
       setTimeout(() => {
-        addRows(reversedData.slice(0, MAX_ROWS), 2000, false);
-      }, 10000);
+        addRows(reversedData.slice(0, dataLengthMinus10).reverse(), 1500, true);
+      }, 7000);
     }
   }
 
@@ -104,8 +108,6 @@ export default function TransactionTable() {
       } else {
         setVisibleRows((prev) => [ data[i],...prev])
       }
-
-
     }
 
     setAddingRows(false);
@@ -119,7 +121,7 @@ export default function TransactionTable() {
   const onFilterChange = (type = "all", name = "") => {
     setVisibleRows([]) // Clear the visible rows
 
-    const filteredData = data.filter((row) => {
+    const filteredData = data.reverse().filter((row) => {
       return (
         (type === "all" || row.alert_status === type) &&
         (name === "" || row.contract_name === name)

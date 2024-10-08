@@ -32,12 +32,12 @@ const TransactionFilters = ({ daaps, onFilterSelect, addingRows }: { daaps: Arra
       </div>
       <div className="flex space-x-1">
         <div>
-          <Button disabled={addingRows} variant="ghost" onClick={() => handleFilterSelect("all", "")}>
+          <Button disabled={false} variant="ghost" onClick={() => handleFilterSelect("all", "")}>
             <MinusCircle className="w-6 h-6" />
           </Button>
         </div>
         <div>
-          <Select disabled={addingRows} onValueChange={(e) => handleFilterSelect(selectedStatus || "all", e)}>
+          <Select disabled={false} onValueChange={(e) => handleFilterSelect(selectedStatus || "all", e)}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter Daap" />
             </SelectTrigger>
@@ -53,7 +53,7 @@ const TransactionFilters = ({ daaps, onFilterSelect, addingRows }: { daaps: Arra
           </Select>
         </div>
         <div>
-          <Select disabled={addingRows} onValueChange={(e) => {
+          <Select disabled={false} onValueChange={(e) => {
             handleFilterSelect(e, selectedDaap || "")
           }}>
             <SelectTrigger className="w-[180px]"> <SelectValue placeholder="Filter Status" />
