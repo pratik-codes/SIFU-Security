@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 
 import { siteConfig } from "@/config/site"
@@ -6,6 +8,11 @@ import { Icons } from "@/components/icons"
 import { ModeToggle } from "@/components/mode-toggle"
 
 export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
+  if (typeof window !== "undefined" && window.location.pathname.includes("/demo")) {
+    return <></>
+  }
+
+
   return (
     <footer className={cn(className)}>
       <div className="mt-24 container flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0">

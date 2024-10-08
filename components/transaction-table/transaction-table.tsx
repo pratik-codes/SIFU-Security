@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
+import { Radio } from "lucide-react";
+
+
 
 import { DetectionApiData } from "@/config/detection-apis";
 import { DetectionApiCall, getTimeAgo } from "@/lib/utils";
@@ -10,9 +13,11 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Radio } from "lucide-react";
+
+
 
 import TransactionFilters from "./transaction-filters";
+
 
 const contractNameIconUrl = {
   "Jito": "https://assets.coingecko.com/coins/images/33228/standard/jto.png?1701137022",
@@ -65,10 +70,17 @@ export default function TransactionTable() {
     const reversedData = data;
 
     setData(reversedData);
-    addRows(reversedData);
+
+    // addRows(reversedData, 400, false, true)
+    addRows(reversedData.slice(MAX_ROWS, Math.min(MAX_ROWS + 10, reversedData.length)), 400, false, true);
+    if (reversedData.length > MAX_ROWS) {
+      setTimeout(() => {
+        addRows(reversedData.slice(0, MAX_ROWS), 2000, false);
+      }, 10000);
+    }
   }
 
-  const addRows = async (data: any, intervalSeconds = 400, maxLimit = false) => {
+  const addRows = async (data: any, intervalSeconds = 400, maxLimit = false, initialRender = false) => {
     setAddingRows(true);
     let limit = 0;
     if (data.length >= MAX_ROWS) {
@@ -87,7 +99,13 @@ export default function TransactionTable() {
     for (let i = 0; i < limit; i++) {
       console.log("Adding row", i, data[i]);
       await new Promise((resolve) => setTimeout(resolve, intervalSeconds)) // 400ms delay between each record
-      setVisibleRows((prev) => [...prev, data[i]])
+      if (initialRender) {
+        setVisibleRows((prev) => [...prev, data[i]])
+      } else {
+        setVisibleRows((prev) => [ data[i],...prev])
+      }
+
+
     }
 
     setAddingRows(false);
@@ -179,7 +197,7 @@ export default function TransactionTable() {
               <AnimatePresence initial={false}>
                 {visibleRows.map((row, index) => (
                   <motion.tr
-                    key={index}
+                    key={row.signature}
                     initial={{ opacity: 0, y: -50 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 50 }}

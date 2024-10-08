@@ -23,7 +23,12 @@ export const FloatingNav = ({
     icon?: JSX.Element
   }[]
   className?: string
-}) => {
+  }) => {
+  if (typeof window !== "undefined" && window.location.pathname.includes("/demo")) {
+    return <></>
+  }
+
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
