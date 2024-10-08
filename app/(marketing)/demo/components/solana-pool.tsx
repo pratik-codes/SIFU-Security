@@ -32,7 +32,7 @@ export default function SolanaPool({
 
   const connectWallet = async () => {
     setIsLoading(true)
-    await simulateDelay(2000)
+    await simulateDelay(5000)
     setIsConnected(true)
     setIsLoading(false)
      toast({
@@ -46,7 +46,7 @@ export default function SolanaPool({
     const depositAmount = Number(amount) * 1000000 // Convert to lamports
     if (depositAmount > 0) {
       setIsLoading(true)
-      await simulateDelay(2000)
+      await simulateDelay(5000)
       setPoolBalance((prev) => prev + depositAmount)
       setUserDeposit((prev) => prev + depositAmount)
       setAmount("")
@@ -71,7 +71,7 @@ export default function SolanaPool({
     const withdrawAmount = Number(amount) * 1000000 // Convert to lamports
     if (withdrawAmount > 0) {
       setIsLoading(true)
-      await simulateDelay(4000)
+      await simulateDelay(5000)
       console.log("withdrawAmount", withdrawAmount)
       console.log("userDeposit", userDeposit)
       if (withdrawAmount <= userDeposit) {

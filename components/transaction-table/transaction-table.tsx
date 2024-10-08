@@ -121,7 +121,7 @@ export default function TransactionTable() {
   const onFilterChange = (type = "all", name = "") => {
     setVisibleRows([]) // Clear the visible rows
 
-    const filteredData = data.reverse().filter((row) => {
+    const filteredData = data.filter((row) => {
       return (
         (type === "all" || row.alert_status === type) &&
         (name === "" || row.contract_name === name)
