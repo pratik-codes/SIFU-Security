@@ -16,38 +16,41 @@ def run_custom_detection(transaction):
     - Blacklisted/suspicious addresses
     - Repetitive function calls
     """
-    analysis_statements = []
+    try:
+        analysis_statements = []
 
-    # Get transaction details
-    instructions = transaction['transaction']['message']['instructions']
-    account_keys = transaction['transaction']['message']['accountKeys']
+        # Get transaction details
+        instructions = transaction['transaction']['message']['instructions']
+        account_keys = transaction['transaction']['message']['accountKeys']
 
-    # 1. Detect large token transfers
-    if detect_large_transfers(instructions):
-        analysis_statements.append("Large token transfer detected")
+        # 1. Detect large token transfers
+        if detect_large_transfers(instructions):
+            analysis_statements.append("Large token transfer detected")
 
-    # 2. Check for interactions with new wallets
-    if detect_new_wallet(account_keys):
-        analysis_statements.append("New wallet interaction detected")
+        # 2. Check for interactions with new wallets
+        if detect_new_wallet(account_keys):
+            analysis_statements.append("New wallet interaction detected")
 
-    # 3. Detect multiple SPL token transfers
-    if detect_multiple_spl_transfers(instructions):
-        analysis_statements.append("Multiple SPL token transfers detected")
+        # 3. Detect multiple SPL token transfers
+        if detect_multiple_spl_transfers(instructions):
+            analysis_statements.append("Multiple SPL token transfers detected")
 
-    # # 4. Check for interactions with known malicious addresses
-    # if detect_known_suspicious_addresses(account_keys):
-    #     analysis_statements.append("Interaction with known suspicious address")
+        # # 4. Check for interactions with known malicious addresses
+        # if detect_known_suspicious_addresses(account_keys):
+        #     analysis_statements.append("Interaction with known suspicious address")
 
-    # 5. Detect repetitive function calls
-    if detect_repetitive_function_calls(instructions):
-        analysis_statements.append("Repetitive contract function calls detected")
+        # 5. Detect repetitive function calls
+        if detect_repetitive_function_calls(instructions):
+            analysis_statements.append("Repetitive contract function calls detected")
 
-    # If no issues detected, return 'safe'
-    if not analysis_statements:
-        return "safe"
+        # If no issues detected, return 'safe'
+        if not analysis_statements:
+            return "No Custom Fraud Found"
 
-    # Join analysis statements into a single string
-    return " | ".join(analysis_statements)
+        # Join analysis statements into a single string
+        return " | ".join(analysis_statements)
+    except Exception as e:
+        return "No Custom Fraud Found"
 
 def detect_large_transfers(instructions):
     """Detect large SOL or SPL token transfers"""

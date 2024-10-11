@@ -22,7 +22,6 @@ class LLMAnalysis:
 			} for tx in transactions
 		]
 		
-		print(formatted_transactions)
 		chat_session = genai.GenerativeModel(
 				self.model_name,
 				generation_config={
@@ -57,5 +56,4 @@ class LLMAnalysis:
 		except Exception as e:
 			analysis = [{"alert_status": "safe", "analysis_statement": "No issues detected"} for _ in transactions]
 		
-		print(json.dumps(analysis))
 		return analysis

@@ -1,5 +1,5 @@
 import boto3
-from datetime import datetime, timezone
+
 from config import DYNAMODB_TABLE, DYNAMODB_REGION
 
 dynamodb = boto3.resource('dynamodb', region_name=DYNAMODB_REGION)
@@ -12,7 +12,7 @@ def fetch_all_signatures_from_dynamo():
     # Create a dictionary of contract addresses mapped to their signatures
     signature_map = {}
     for item in response.get('Items', []):
-        contract_address = item['contract']
+        contract_address = item['contract_address']
         if contract_address not in signature_map:
             signature_map[contract_address] = []
         signature_map[contract_address].append(item['signature'])
@@ -22,14 +22,15 @@ def fetch_all_signatures_from_dynamo():
 # Save processed transaction analysis to DynamoDB
 def save_to_dynamodb(processed_results):
     for result in processed_results:
-        timestamp = datetime.now(timezone.utc).isoformat()
         table.put_item(
             Item={
-                'timestamp': timestamp,
-                'contract': result['transaction']['contract'],  # Store contract address
-                'signature': result['transaction']['signature'],
-                'analysis': result['transaction']['analysis'],  # LLM Analysis
-                'custom_detection': result['transaction']['custom_detection'],  # Custom Detection
-                'alert_status': result['transaction']['alert_status']
+                'timestamp': result["timestamp"],
+                'contract_address': result['contract_address'], 
+                'contract_name': result['contract_name'], 
+                'signature': result['transaction_signature'],
+                'score': result['score'],
+                'analysis': result['analysis'],  # LLM Analysis
+                'custom_detection': result['custom_detection'],  # Custom Detection
+                'alert_status': result['alert_status']
             }
         )
