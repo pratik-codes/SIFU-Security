@@ -16,15 +16,15 @@ const Hero = () => {
       transition={{ duration: 0.7 }}
       className="w-8/12 mx-auto flex max-w-[64rem] flex-col items-center gap-4 text-center"
     >
-      <div className="rounded-3xl mt-24 lg:mt-0 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] px-4 text-sm font-medium">
-        <Image
-          className="py-2 rounded-3xl"
-          src="https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg"
-          alt="Solana Logo"
-          width={100}
-          height={100}
-        />
-      </div>
+      {/* <div className="rounded-3xl mt-24 lg:mt-0 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] px-4 text-sm font-medium"> */}
+      {/*   <Image */}
+      {/*     className="py-2 rounded-3xl" */}
+      {/*     src="https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg" */}
+      {/*     alt="Solana Logo" */}
+      {/*     width={100} */}
+      {/*     height={100} */}
+      {/*   /> */}
+      {/* </div> */}
       <Spotlight
         className="-top-50 left-0 fixed md:left-60 md:-top-20"
         fill="white"
