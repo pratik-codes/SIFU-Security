@@ -18,11 +18,11 @@ const Hero = () => {
     >
       <div className="rounded-3xl mt-24 lg:mt-0 transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#8686f01f_inset] px-4 text-sm font-medium">
         <Image
-          className="py-2 px-2"
-          src="https://solana.com/_next/static/media/logotype.e4df684f.svg"
+          className="py-2 rounded-3xl"
+          src="https://pbs.twimg.com/profile_images/1472933274209107976/6u-LQfjG_400x400.jpg"
           alt="Solana Logo"
-          width={150}
-          height={150}
+          width={100}
+          height={100}
         />
       </div>
       <Spotlight
