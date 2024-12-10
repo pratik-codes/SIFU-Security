@@ -1,6 +1,7 @@
 import axios from "axios"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+
 import { env } from "@/env.mjs"
 
 export function cn(...inputs: ClassValue[]) {
@@ -28,53 +29,55 @@ export const DetectionApiCall = async ({ url, body, method }) => {
       data: body,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
-      }
+        "Access-Control-Allow-Headers":
+          "Origin, X-Requested-With, Content-Type, Accept",
+      },
     })
-    console.log({ res });
+    console.log({ res })
     if (res) {
-      return { ok: true, data: res.data.data };
+      return { ok: true, data: res.data.data }
     }
-
   } catch (error) {
     return { error: error, ok: false }
   }
 }
 
-export const getTimeAgo = (timestamp: string) => {
-  // Replace the space between date and time with 'T' to make it ISO-compliant
-  const isoTimestamp = timestamp.replace(' ', 'T') + 'Z'; // Adding 'Z' to indicate UTC
+export const getTimeAgo = (timestamp: string, idx: number) => {
+  console.log({ idx })
+  // Start with "10 seconds ago" and reduce by 1 second per idx
+  const now = new Date()
+  const adjustedNow = new Date(now)
+  adjustedNow.setSeconds(now.getSeconds() - 10 - idx) // Start with 10 seconds ago and add idx
 
-  const now = new Date(); // Current time in UTC
-  const time = new Date(isoTimestamp); // Parsed time in UTC
-  const secondsAgo = Math.floor((now.getTime() - time.getTime()) / 1000); // Calculate time difference in seconds
+  const time = new Date(timestamp) // Parse the timestamp
+  const secondsAgo = Math.floor((now.getTime() - adjustedNow.getTime()) / 1000)
 
   if (secondsAgo < 60) {
-    return `${secondsAgo} seconds ago`;
+    return `${secondsAgo} seconds ago`
   } else if (secondsAgo < 3600) {
-    const minutesAgo = Math.floor(secondsAgo / 60);
-    return `${minutesAgo} minutes ago`;
+    const minutesAgo = Math.floor(secondsAgo / 60)
+    return `${minutesAgo} minutes ago`
   } else if (secondsAgo < 86400) {
-    const hoursAgo = Math.floor(secondsAgo / 3600);
-    return `${hoursAgo} hours ago`;
+    const hoursAgo = Math.floor(secondsAgo / 3600)
+    return `${hoursAgo} hours ago`
   } else {
-    const daysAgo = Math.floor(secondsAgo / 86400);
-    return `${daysAgo} days ago`;
+    const daysAgo = Math.floor(secondsAgo / 86400)
+    return `${daysAgo} days ago`
   }
-};
+}
 
 export const getTransactionTimestamp = (): string => {
-  const now = new Date();
+  const now = new Date()
 
-  now.setUTCDate(now.getUTCDate() - 5);
+  now.setUTCDate(now.getUTCDate() - 30)
 
-  const year = now.getUTCFullYear();
-  const month = String(now.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-  const day = String(now.getUTCDate()).padStart(2, '0');
+  const year = now.getUTCFullYear()
+  const month = String(now.getUTCMonth() + 1).padStart(2, "0") // Months are zero-indexed
+  const day = String(now.getUTCDate()).padStart(2, "0")
 
-  const hours = String(now.getUTCHours()).padStart(2, '0');
-  const minutes = String(now.getUTCMinutes()).padStart(2, '0');
-  const seconds = String(now.getUTCSeconds()).padStart(2, '0');
+  const hours = String(now.getUTCHours()).padStart(2, "0")
+  const minutes = String(now.getUTCMinutes()).padStart(2, "0")
+  const seconds = String(now.getUTCSeconds()).padStart(2, "0")
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-};
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+}
