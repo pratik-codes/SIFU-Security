@@ -47,7 +47,7 @@ export async function GET(req: Request) {
       return new Response("something went wrong, error: " + JSON.stringify(response.error), { status: 500 })
     }
 
-    return NextResponse.json({ data: response.data, status: 200 });
+    return NextResponse.json({ data: response.data, status: 200, curl: response?.curl });
   } catch (error) {
     console.log("ERROR WHILE SCAN API: ", { error });
     if (error instanceof z.ZodError) {

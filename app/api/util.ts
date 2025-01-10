@@ -43,7 +43,9 @@ export const GetScanResult = async (timeStamp: string) => {
   console.log({ timeStamp });
 
   // print the curl request
-  console.log(`curl -X GET "${GetTransactionUrl}?timestamp=${timeStamp}" -H "x-api-key: ${process.env.AUTH_KEY_TRANSACTION}"`);
+
+  const curl = `curl -X GET "${GetTransactionUrl}?timestamp=${timeStamp}" -H "x-api-key: ${process.env.AUTH_KEY_TRANSACTION}"`;
+  console.log({curl});
 
   try {
     const res = await axios({
@@ -57,10 +59,10 @@ export const GetScanResult = async (timeStamp: string) => {
       return { ok: true, data: res.data };
     }
 
-    return { ok: false, error: res };
+    return { ok: false, error: res, curl: curl};
   } catch (error) {
     console.log("ERROR in GetTransactionCall: ", error);
-    return { error: error, ok: false };
+    return { error: error, ok: false, curl: curl };
   }
 }
 
